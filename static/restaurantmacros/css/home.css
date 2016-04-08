@@ -1,0 +1,21 @@
+body {
+  min-height: 2000px;
+  padding-top: 250px;
+}
+
+p.go-button {
+    padding-top: 30px;
+}
+
+div.form-group {
+    padding-bottom: 10px;
+}
+
+.form-control {
+    width: 67px;
+    display: inline-block;
+}
+
+label {
+    width: 75px;
+}

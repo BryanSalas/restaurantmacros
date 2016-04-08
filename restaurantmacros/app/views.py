@@ -1,9 +1,11 @@
 from django.shortcuts import get_object_or_404, render
 
 from .models import Question
+from .forms import SearchForm
 
 def home(request):
-    return render(request, 'home.html')
+    form = SearchForm()
+    return render(request, 'home.html', {'form' : form})
 
 
 def index(request):

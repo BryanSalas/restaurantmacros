@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
-    <link href="{% static "restaurantmacros/css/navbar-fixed-top.css" %}" rel="stylesheet">
+    <link href="{% static "restaurantmacros/css/home.css" %}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -76,40 +76,56 @@
       <div class="jumbotron">
         <h1>Counting macros, made easy.</h1>
         <p>Simply set the ranges for calories, protein, fat, and carbs, hit go and browse available food from over 600 restaurants and fast food chains!</p>
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="exampleInputName2">Calories</label>
-                <input type="number" class="form-control" id="exampleInputName2" placeholder="Min">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail2">-</label>
-                <input type="number" class="form-control" id="exampleInputEmail2" placeholder="Max">
-            </div>
-        </form>
-          <form class="form-inline">
-            <div class="form-group" style="padding: 5px 0px 5px 0px">
-                <label for="exampleInputName2" style="padding-right: 6px">Protein</label>
-                <input type="number" class="form-control" id="exampleInputName2" placeholder="Min">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail2">-</label>
-                <input type="number" class="form-control" id="exampleInputEmail2" placeholder="Max">
-            </div>
-        </form>
-          <form class="form-inline">
-            <div class="form-group">
-                <label for="exampleInputName2" style="padding-right: 33px">Fat</label>
-                <input type="number" class="form-control" id="exampleInputName2" placeholder="Min">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputEmail2">-</label>
-                <input type="number" class="form-control" id="exampleInputEmail2" placeholder="Max">
-            </div>
-        </form>
+          <form action="/restaurantmacros/results/" method="post">
+              {% csrf_token %}
+              {% for field in form %}
+                <div class="form-inline">
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        <input style="width: 67px" type="number" class="form-control" id="cal_min" placeholder="Min">
+                    </div>
+                </div>
+              {% endfor %}
+              <!-- <div class="form-inline">
+                  <div class="form-group">
+                      <label for="cal_min">Calories</label>
+                      <input style="width: 67px" type="number" min="0" class="form-control" id="cal_min" placeholder="Min">
+                      -
+                      <input type="number" class="form-control" id="cal_max" placeholder="Max">
+                  </div>
+              </div>
+              <div class="form-inline">
+                  <div class="form-group">
+                      <label for="pro_min">Protein</label>
+                      <input type="number" min="0" class="form-control" id="pro_min" placeholder="Min">
+                      -
+                      <input type="number" class="form-control" id="pro_max" placeholder="Max">
+                  </div>
+              </div>
+              <div class="form-inline">
+                  <div class="form-group">
+                      <label for="fat_min">Fat</label>
+                      <input type="number" min="0" class="form-control" id="fat_min" placeholder="Min">
+                      -
+                      <input type="number" class="form-control" id="fat_max" placeholder="Max">
+                  </div>
+              </div>
+              <div class="form-inline">
+                  <div class="form-group">
+                      <label for="carb_min">Carbs</label>
+                      <input type="number" min="0" class="form-control" id="carb_min" placeholder="Min">
+                      -
+                      <input type="number" class="form-control" id="carb_max" placeholder="Max">
+                  </div>
+              </div> -->
 
-        <p style="padding-top: 20px">
-          <a class="btn btn-lg btn-success" href="../../components/#navbar" role="button">Go</a>
-        </p>
+              <p class="go-button">
+                <input type="submit" value="Go" class="btn btn-lg btn-success" href="../../components/#navbar" role="button"/>
+              </p>
+          </form>
+
+
+
       </div>
 
     </div> <!-- /container -->
