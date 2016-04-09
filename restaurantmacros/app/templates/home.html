@@ -8,7 +8,7 @@
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
         <h1>Counting macros, made easy.</h1>
-        <p>Simply set the ranges for calories, protein, fat, and carbs, hit go and browse available food from over 600 restaurants and fast food chains!</p>
+        <p>Simply set the amount for each macros, hit go and browse available food from over 600 restaurants and fast food chains!</p>
           <form action="/restaurantmacros/results/" method="post">
               {% csrf_token %}
               {% for field in form %}
@@ -24,9 +24,6 @@
                 <input type="submit" value="Go" class="btn btn-lg btn-success" href="../../components/#navbar" role="button"/>
               </p>
           </form>
-
-
-
       </div>
 
     </div> <!-- /container -->
