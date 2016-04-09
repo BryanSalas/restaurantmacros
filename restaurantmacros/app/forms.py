@@ -2,8 +2,8 @@ from django import forms
 
 class SearchForm(forms.Form):
 
-    general_min = { 'min_value' : '0', 'label_suffix' : "", 'widget' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder' : 'Min', 'style' : 'width : 67px'}) }
-    general_max = { 'min_value' : '0', 'label_suffix' : "", 'widget' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder' : 'Max', 'style' : 'width : 67px'}), 'label':"-"}
+    general_min = { 'min_value' : '0', 'label_suffix' : "", 'widget' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder' : 'Min', 'style' : 'width : 68px'}) }
+    general_max = { 'min_value' : '0', 'label_suffix' : "", 'widget' : forms.NumberInput(attrs={'class': 'form-control', 'placeholder' : 'Max', 'style' : 'width : 68px'}), 'label':"-"}
 
     # calories
     cal_min = forms.IntegerField(label = "Calories", **general_min)
