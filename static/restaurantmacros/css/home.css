@@ -16,6 +16,6 @@ div.form-group {
     display: inline-block;
 }
 
-label {
+[for$="min"] {
     width: 75px;
 }

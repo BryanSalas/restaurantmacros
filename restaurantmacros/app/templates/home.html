@@ -78,46 +78,38 @@
         <p>Simply set the ranges for calories, protein, fat, and carbs, hit go and browse available food from over 600 restaurants and fast food chains!</p>
           <form action="/restaurantmacros/results/" method="post">
               {% csrf_token %}
-              {% for field in form %}
-                <div class="form-inline">
-                    <div class="form-group">
-                        {{ field.label_tag }}
-                        <input style="width: 67px" type="number" class="form-control" id="cal_min" placeholder="Min">
-                    </div>
-                </div>
-              {% endfor %}
-              <!-- <div class="form-inline">
+              <div class="form-inline">
                   <div class="form-group">
-                      <label for="cal_min">Calories</label>
-                      <input style="width: 67px" type="number" min="0" class="form-control" id="cal_min" placeholder="Min">
-                      -
-                      <input type="number" class="form-control" id="cal_max" placeholder="Max">
+                      {{ form.cal_min.label_tag }}
+                      {{ form.cal_min }}
+                      {{ form.cal_max.label_tag }}
+                      {{ form.cal_max }}
                   </div>
               </div>
               <div class="form-inline">
                   <div class="form-group">
-                      <label for="pro_min">Protein</label>
-                      <input type="number" min="0" class="form-control" id="pro_min" placeholder="Min">
-                      -
-                      <input type="number" class="form-control" id="pro_max" placeholder="Max">
+                      {{ form.pro_min.label_tag }}
+                      {{ form.pro_min }}
+                      {{ form.pro_max.label_tag }}
+                      {{ form.pro_max }}
                   </div>
               </div>
               <div class="form-inline">
                   <div class="form-group">
-                      <label for="fat_min">Fat</label>
-                      <input type="number" min="0" class="form-control" id="fat_min" placeholder="Min">
-                      -
-                      <input type="number" class="form-control" id="fat_max" placeholder="Max">
+                      {{ form.fat_min.label_tag }}
+                      {{ form.fat_min }}
+                      {{ form.fat_max.label_tag }}
+                      {{ form.fat_max }}
                   </div>
               </div>
               <div class="form-inline">
-                  <div class="form-group">
-                      <label for="carb_min">Carbs</label>
-                      <input type="number" min="0" class="form-control" id="carb_min" placeholder="Min">
-                      -
-                      <input type="number" class="form-control" id="carb_max" placeholder="Max">
+                   <div class="form-group">
+                      {{ form.carb_min.label_tag }}
+                      {{ form.carb_min }}
+                      {{ form.carb_max.label_tag }}
+                      {{ form.carb_max }}
                   </div>
-              </div> -->
+              </div>
 
               <p class="go-button">
                 <input type="submit" value="Go" class="btn btn-lg btn-success" href="../../components/#navbar" role="button"/>
