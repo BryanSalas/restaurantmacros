@@ -12,10 +12,10 @@ div.form-group {
 }
 
 .form-control {
-    width: 67px;
+    width: 71px;
     display: inline-block;
 }
 
-[for$="min"] {
+label {
     width: 75px;
 }
