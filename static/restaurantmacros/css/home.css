@@ -16,6 +16,12 @@ div.form-group {
     display: inline-block;
 }
 
+.jumbotron {
+    margin-top: 50px;
+    box-shadow: 0 0 30px black;
+    padding:15px;
+}
+
 label {
     width: 75px;
 }
