@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'oswaldregular';
+    src: url('../fonts/oswald-normal-normal.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'oswaldbold';
+    src: url('../fonts/oswald-bold-normal.ttf') format('truetype');
+}
+
+body {
+  min-height: 2000px;
+  padding-top: 120px;
+  font-family: oswaldregular;
+}

@@ -1,0 +1,29 @@
+a {
+    font-size: 21px;
+}
+
+@media screen and (max-width: 768px) {
+    a {
+        font-size: 14px;
+    }
+}
+
+img {
+        width: 317px;
+}
+
+@media screen and (max-width: 768px) {
+    img {
+        width: 200px;
+    }
+}
+
+.nav.navbar-nav {
+    padding-top: 23px;
+}
+
+@media screen and (max-width: 768px) {
+    .nav.navbar-nav {
+        padding-top: 0px;
+    }
+}
