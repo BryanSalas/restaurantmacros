@@ -8,3 +8,4 @@ class SearchForm(forms.Form):
     protein = forms.IntegerField(**general)
     fat = forms.IntegerField(**general)
     carbs = forms.IntegerField(**general)
+

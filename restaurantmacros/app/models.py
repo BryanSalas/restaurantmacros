@@ -1,18 +1,16 @@
 from django.db import models
 
+class Restaurant(models.Model):
+    name = models.CharField(max_length=200)
+    website = models.URLField()
+    brand_id = models.CharField(max_length=200)
 
-class Question(models.Model):
-    question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+class Food(models.Model):
+    name = models.CharField(max_length=200)
+    item_id = models.CharField(max_length=200)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.question_text
-
-
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.choice_text
+    calories = models.IntegerField()
+    protein = models.IntegerField()
+    fat = models.IntegerField()
+    carbs = models.IntegerField()

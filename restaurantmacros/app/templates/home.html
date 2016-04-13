@@ -9,7 +9,7 @@
       <div class="jumbotron">
         <h1>Counting macros, made easy.</h1>
         <p>Simply set the amount for each macros, hit go and browse available food from over 600 restaurants and fast food chains!</p>
-          <form action="/restaurantmacros/results/" method="post">
+          <form action="/results/" method="post">
               {% csrf_token %}
               {% for field in form %}
                   <div class="form-inline">
@@ -28,4 +28,4 @@
 
     </div> <!-- /container -->
 
-{% include "end.html" %}
+{% include "footer.html" %}

@@ -9,7 +9,7 @@ a {
 }
 
 img {
-        width: 317px;
+        width: 314px;
 }
 
 @media screen and (max-width: 768px) {
@@ -20,6 +20,7 @@ img {
 
 .nav.navbar-nav {
     padding-top: 23px;
+    padding-left: 15px;
 }
 
 @media screen and (max-width: 768px) {
