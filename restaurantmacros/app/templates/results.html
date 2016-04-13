@@ -1,0 +1,35 @@
+{% include "navbar.html" %}
+
+{% load staticfiles %}
+<link href="{% static "restaurantmacros/css/home.css" %}" rel="stylesheet">
+
+    <div class="container">
+
+        <table class="table table-striped">
+  <thead>
+    <tr>
+        <th>Restaurant</th>
+      <th>Food</th>
+      <th>Calories</th>
+      <th>Protein</th>
+        <th>Fat</th>
+        <th>Carbs</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+        <tr>
+          <td>{{item.restaurant.name}}</td>
+          <td>{{item.name}}</td>
+          <td>{{item.calories}}</td>
+          <td>{{item.protein}}</td>
+          <td>{{item.fat}}</td>
+            <td>{{item.carbs}}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+    </div> <!-- /container -->
+
+{% include "footer.html" %}

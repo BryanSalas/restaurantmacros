@@ -9,8 +9,7 @@
       <div class="jumbotron">
         <h1>Counting macros, made easy.</h1>
         <p>Simply set the amount for each macros, hit go and browse available food from over 600 restaurants and fast food chains!</p>
-          <form action="/results/" method="post">
-              {% csrf_token %}
+          <form action="/results/" method="get">
               {% for field in form %}
                   <div class="form-inline">
                       <div class="form-group">
@@ -21,7 +20,7 @@
               {% endfor %}
 
               <p class="go-button">
-                <input type="submit" value="Go" class="btn btn-lg btn-success" href="../../components/#navbar" role="button"/>
+                <input type="submit" value="Go" class="btn btn-lg btn-success" role="button"/>
               </p>
           </form>
       </div>

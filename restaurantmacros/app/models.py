@@ -5,6 +5,9 @@ class Restaurant(models.Model):
     website = models.URLField()
     brand_id = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 class Food(models.Model):
     name = models.CharField(max_length=200)
     item_id = models.CharField(max_length=200)
@@ -14,3 +17,6 @@ class Food(models.Model):
     protein = models.IntegerField()
     fat = models.IntegerField()
     carbs = models.IntegerField()
+
+    def __str__(self):
+        return self.name

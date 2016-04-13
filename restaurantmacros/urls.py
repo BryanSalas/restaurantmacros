@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^restaurants/', views.restaurants, name='restaurants'),
     url(r'^food/', views.food, name='food'),
-    url(r'^polls/', include('restaurantmacros.app.urls')),
+    url(r'^results/', views.results, name='results'),
     url(r'^admin/', include(admin.site.urls)),
 ]
