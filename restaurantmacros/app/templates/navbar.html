@@ -16,6 +16,8 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
     <!-- Custom styles for this template -->
     <link href="{% static "restaurantmacros/css/main.css" %}" rel="stylesheet">
     <link href="{% static "restaurantmacros/css/navbar.css" %}" rel="stylesheet">
@@ -71,8 +73,6 @@
     </nav>
 
   <script type="text/javascript">
-        debugger;
-        console.log("here");
         var activeTab = "{{activeTab}}";
         var elem = document.getElementById(activeTab);
         elem.className = "active";

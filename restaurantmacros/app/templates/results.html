@@ -1,35 +1,39 @@
 {% include "navbar.html" %}
 
 {% load staticfiles %}
-<link href="{% static "restaurantmacros/css/home.css" %}" rel="stylesheet">
+<link href="{% static "restaurantmacros/css/results.css" %}" rel="stylesheet">
 
     <div class="container">
 
-        <table class="table table-striped">
-  <thead>
-    <tr>
-        <th>Restaurant</th>
-      <th>Food</th>
-      <th>Calories</th>
-      <th>Protein</th>
-        <th>Fat</th>
-        <th>Carbs</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in items %}
-        <tr>
-          <td>{{item.restaurant.name}}</td>
-          <td>{{item.name}}</td>
-          <td>{{item.calories}}</td>
-          <td>{{item.protein}}</td>
-          <td>{{item.fat}}</td>
-            <td>{{item.carbs}}</td>
-        </tr>
-    {% endfor %}
-  </tbody>
-</table>
+        <table class="table table-striped sortable">
+            <thead>
+                <tr>
+                    <th data-defaultsort="asc" data-defaultsign="reversed">Restaurant</th>
+                    <th data-firstsort="asc" data-defaultsign="reversed">Food</th>
+                    <th data-firstsort="desc" data-defaultsign="reversed">Calories</th>
+                    <th data-firstsort="desc" data-defaultsign="reversed">Protein</th>
+                    <th data-firstsort="desc" data-defaultsign="reversed">Fat</th>
+                    <th data-firstsort="desc" data-defaultsign="reversed">Carbs</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                      <td>{{item.restaurant.name}}</td>
+                      <td>{{item.name}}</td>
+                      <td>{{item.calories}}</td>
+                      <td>{{item.protein}}</td>
+                      <td>{{item.fat}}</td>
+                      <td>{{item.carbs}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
     </div> <!-- /container -->
+
+<script src="http://drvic10k.github.io/bootstrap-sortable/Scripts/moment.min.js"></script>
+<script src="http://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+<link rel="stylesheet" href="http://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css">
 
 {% include "footer.html" %}
