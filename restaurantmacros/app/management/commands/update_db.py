@@ -16,7 +16,7 @@ class Command(BaseCommand):
         high_index = 50
         while(low_index <= totalHits):
             resp = nix.search('', brand_id=restaurant.brand_id, results=str(low_index) + ":" + str(high_index)).json()
-            print(resp)
+            #print(resp)
             for hit in resp['hits']:
                 item_id   = hit['fields']['item_id']
                 item = Food.objects.filter(item_id=item_id)
