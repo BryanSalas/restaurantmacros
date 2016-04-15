@@ -13,3 +13,7 @@ body {
   padding-top: 120px;
   font-family: oswaldregular;
 }
+
+table {
+    font-size: 20px;
+}

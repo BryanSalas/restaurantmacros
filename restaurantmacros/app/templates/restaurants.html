@@ -1,10 +1,32 @@
 {% include "navbar.html" %}
 
 {% load staticfiles %}
-<link href="{% static "restaurantmacros/css/home.css" %}" rel="stylesheet">
+<!-- <link href="{% static "restaurantmacros/css/restaurants.css" %}" rel="stylesheet"> -->
 
     <div class="container">
+        <table class="table table-striped sortable table-fixed-header">
+            <thead class="header">
+                <tr>
+                    <th data-defaultsort="asc" data-defaultsign="reversed">Restaurant</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for restaurant in restaurants %}
+                    <tr>
+                      <td>{{restaurant.name}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
     </div> <!-- /container -->
+
+<script src="http://drvic10k.github.io/bootstrap-sortable/Scripts/moment.min.js"></script>
+<script src="http://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
+<script src="{% static "restaurantmacros/js/table.js" %}"></script>
+<script>
+$('.table-fixed-header').fixedHeader();
+</script>
+<link rel="stylesheet" href="http://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css">
 
 {% include "footer.html" %}
