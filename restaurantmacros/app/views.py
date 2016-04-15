@@ -10,7 +10,23 @@ def home(request):
 
 
 def restaurants(request):
-    return render(request, 'restaurants.html', {'activeTab': 'restaurantsTab', 'restaurants': Restaurant.objects.all()})
+    all_restaurants = list(Restaurant.objects.all().order_by('name'))
+    restaurant_rows = []
+    index = 0
+
+    try:
+        while True:
+            row = []
+            row.append(all_restaurants[index])
+            index += 1
+            row.append(all_restaurants[index])
+            index += 1
+            row.append(all_restaurants[index])
+            index += 1
+            restaurant_rows.append(row)
+    except IndexError:
+        view_dict = {'activeTab': 'restaurantsTab', 'restaurant_rows': restaurant_rows}
+        return render(request, 'restaurants.html', view_dict)
 
 
 def food(request):
