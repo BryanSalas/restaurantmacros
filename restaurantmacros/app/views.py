@@ -1,7 +1,15 @@
 from django.shortcuts import get_object_or_404, render
+from nutritionix import Nutritionix
 
 from .forms import SearchForm
 from .models import Food, Restaurant
+
+from dal import autocomplete
+
+APP_ID = "dba98fde"
+API_KEY = "adbe45626226708ccb7d85830347aada"
+
+nix = Nutritionix(app_id=APP_ID, api_key=API_KEY)
 
 
 def home(request):
@@ -29,6 +37,20 @@ def restaurants(request):
         return render(request, 'restaurants.html', view_dict)
 
 
+class RestaurantAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        #if not self.request.user.is_authenticated():
+        #    return Restaurant.objects.none()
+
+        qs = Restaurant.objects.all().order_by('name')
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
+
+
 def food(request):
     return render(request, 'food.html', {'activeTab': 'foodTab'})
 
@@ -39,6 +61,46 @@ def results(request):
     fat = request.GET['fat']
     carbs = request.GET['carbs']
 
-    items = Food.objects.filter(calories__lte=calories).filter(protein__lte=protein).filter(fat__lte=fat).filter(carbs__lte=carbs).order_by('restaurant', '-calories')
+    restaurant = request.GET['restaurant']
 
-    return render(request, 'results.html', {'items' : items})
+    brand_id = Restaurant.objects.filter(id=restaurant)[0].brand_id
+
+    search_results = nix.search().nxql(
+        filters={
+            "brand_id": brand_id,
+            "nf_calories": {
+                "lte": calories
+            },
+            "nf_protein": {
+                "lte": protein
+            },
+            "nf_total_fat": {
+                "lte": fat
+            },
+            "nf_total_carbohydrate": {
+                "lte": carbs
+            }
+        },
+        fields=["item_name", "brand_name", "brand_id", "nf_calories", "nf_protein", "nf_total_fat",
+                "nf_total_carbohydrate"],
+        sort={
+            "field": "item_name.sortable_na",
+            "order": "asc"
+        },
+        offset=0,
+        limit=50
+    ).json()
+
+    items = []
+    cur_rest = Restaurant.objects.filter(id=restaurant)[0]
+
+    for hit in search_results['hits']:
+        fields = hit['fields']
+        items.append(Food(name=fields['item_name'],
+                          calories=fields['nf_calories'],
+                          protein=fields['nf_protein'],
+                          fat=fields['nf_total_fat'],
+                          carbs=fields['nf_total_carbohydrate'],
+                          restaurant=cur_rest))
+
+    return render(request, 'results.html', {'items': items})

@@ -20,6 +20,7 @@ figure {
     -webkit-transition: -webkit-transform 0.2s;
     -moz-transition: -moz-transform 0.2s;
     -o-transition: -o-transform 0.2s;
+    width: 200px;
 }
 
 .row {

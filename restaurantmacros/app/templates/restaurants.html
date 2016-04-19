@@ -8,19 +8,31 @@
                 <div class="row">
                     <figure class="col-md-4">
                         <a href="/restaurants/{{rest_one.brand_id}}">
-                            <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" src="{{ rest_one.logo.url }}" data-holder-rendered="true" style="width: 200px; height: 200px;">
+                            <img data-src="holder.js/200x200"
+                                 class="img-thumbnail"
+                                 alt="No image for {{ rest_one.name }}"
+                                 src="{{ rest_one.logo.url }}"
+                                 data-holder-rendered="true">
                         </a>
                         <figcaption>{{rest_one.name}}</figcaption>
                     </figure>
                     <figure class="col-md-4">
                         <a href="/restaurants/{{rest_one.brand_id}}">
-                            <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" src="{{ rest_two.logo.url }}" data-holder-rendered="true" style="width: 200px; height: 200px;">
+                            <img data-src="holder.js/200x200"
+                                 class="img-thumbnail"
+                                 alt="No image for {{ rest_two.name }}"
+                                 src="{{ rest_two.logo.url }}"
+                                 data-holder-rendered="true">
                         </a>
                         <figcaption>{{rest_two.name}}</figcaption>
                     </figure>
                     <figure class="col-md-4">
                         <a href="/restaurants/{{rest_one.brand_id}}">
-                            <img data-src="holder.js/200x200" class="img-thumbnail" alt="200x200" src="{{ rest_three.logo.url }}" data-holder-rendered="true" style="width: 200px; height: 200px;">
+                            <img data-src="holder.js/200x200"
+                                 class="img-thumbnail"
+                                 alt="No image for {{ rest_three.name }}"
+                                 src="{{ rest_three.logo.url }}"
+                                 data-holder-rendered="true">
                         </a>
                         <figcaption>{{rest_three.name}}</figcaption>
                     </figure>
@@ -31,7 +43,6 @@
 
 <script src="http://drvic10k.github.io/bootstrap-sortable/Scripts/moment.min.js"></script>
 <script src="http://drvic10k.github.io/bootstrap-sortable/Scripts/bootstrap-sortable.js"></script>
-<script src="{% static "restaurantmacros/js/table.js" %}"></script>
 <link rel="stylesheet" href="http://drvic10k.github.io/bootstrap-sortable/Contents/bootstrap-sortable.css">
 
 {% include "footer.html" %}

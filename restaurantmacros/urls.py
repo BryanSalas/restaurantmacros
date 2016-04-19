@@ -8,6 +8,7 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
+    url(r'^restaurant-autocomplete/$', views.RestaurantAutocomplete.as_view(), name='restaurant-autocomplete'),
     url(r'^restaurants/', views.restaurants, name='restaurants'),
     url(r'^food/', views.food, name='food'),
     url(r'^results/', views.results, name='results'),
