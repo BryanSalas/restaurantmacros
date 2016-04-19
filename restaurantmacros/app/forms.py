@@ -17,10 +17,10 @@ class SearchForm(forms.ModelForm):
     fat = forms.IntegerField(**general)
     carbs = forms.IntegerField(**general)
 
-    restaurant = forms.ModelChoiceField(
+    restaurants = forms.ModelChoiceField(
         queryset=Restaurant.objects.all(),
-        widget=autocomplete.ModelSelect2(url='restaurant-autocomplete',
-                                         attrs={'data-placeholder': 'Restaurant'})
+        widget=autocomplete.ModelSelect2Multiple(url='restaurant-autocomplete',
+                                         attrs={'data-placeholder': 'Restaurants'})
     )
 
     class Meta:

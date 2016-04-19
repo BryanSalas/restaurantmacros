@@ -56,51 +56,53 @@ def food(request):
 
 
 def results(request):
+    print(request)
     calories = request.GET['calories']
     protein = request.GET['protein']
     fat = request.GET['fat']
     carbs = request.GET['carbs']
 
-    restaurant = request.GET['restaurant']
-
-    brand_id = Restaurant.objects.filter(id=restaurant)[0].brand_id
-
-    search_results = nix.search().nxql(
-        filters={
-            "brand_id": brand_id,
-            "nf_calories": {
-                "lte": calories
-            },
-            "nf_protein": {
-                "lte": protein
-            },
-            "nf_total_fat": {
-                "lte": fat
-            },
-            "nf_total_carbohydrate": {
-                "lte": carbs
-            }
-        },
-        fields=["item_name", "brand_name", "brand_id", "nf_calories", "nf_protein", "nf_total_fat",
-                "nf_total_carbohydrate"],
-        sort={
-            "field": "item_name.sortable_na",
-            "order": "asc"
-        },
-        offset=0,
-        limit=50
-    ).json()
+    restaurant_ids = request.GET.getlist('restaurants')
 
     items = []
-    cur_rest = Restaurant.objects.filter(id=restaurant)[0]
 
-    for hit in search_results['hits']:
-        fields = hit['fields']
-        items.append(Food(name=fields['item_name'],
-                          calories=fields['nf_calories'],
-                          protein=fields['nf_protein'],
-                          fat=fields['nf_total_fat'],
-                          carbs=fields['nf_total_carbohydrate'],
-                          restaurant=cur_rest))
+    for restaurant_id in restaurant_ids:
+        cur_rest = Restaurant.objects.filter(id=restaurant_id)[0]
+        brand_id = cur_rest.brand_id
+
+        search_results = nix.search().nxql(
+            filters={
+                "brand_id": brand_id,
+                "nf_calories": {
+                    "lte": calories
+                },
+                "nf_protein": {
+                    "lte": protein
+                },
+                "nf_total_fat": {
+                    "lte": fat
+                },
+                "nf_total_carbohydrate": {
+                    "lte": carbs
+                }
+            },
+            fields=["item_name", "brand_name", "brand_id", "nf_calories", "nf_protein", "nf_total_fat",
+                    "nf_total_carbohydrate"],
+            sort={
+                "field": "item_name.sortable_na",
+                "order": "asc"
+            },
+            offset=0,
+            limit=50
+        ).json()
+
+        for hit in search_results['hits']:
+            fields = hit['fields']
+            items.append(Food(name=fields['item_name'],
+                              calories=fields['nf_calories'],
+                              protein=fields['nf_protein'],
+                              fat=fields['nf_total_fat'],
+                              carbs=fields['nf_total_carbohydrate'],
+                              restaurant=cur_rest))
 
     return render(request, 'results.html', {'items': items})
