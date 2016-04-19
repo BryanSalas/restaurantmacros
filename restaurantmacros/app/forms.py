@@ -6,11 +6,10 @@ from .models import Restaurant
 class SearchForm(forms.ModelForm):
 
     general = {'min_value': '0',
-               'label_suffix': "",
+               'label_suffix': '',
                'widget': forms.NumberInput(attrs=
-                                           {'class': 'form-control',
-                                            'placeholder': 'Goal',
-                                            'style': 'width : 71px'})}
+                                           {'placeholder': 'Any',
+                                            'style': 'width : 85px'})}
 
     calories = forms.IntegerField(**general)
     protein = forms.IntegerField(**general)
@@ -20,7 +19,7 @@ class SearchForm(forms.ModelForm):
     restaurants = forms.ModelChoiceField(
         queryset=Restaurant.objects.all(),
         widget=autocomplete.ModelSelect2Multiple(url='restaurant-autocomplete',
-                                         attrs={'data-placeholder': 'Restaurants'})
+                                         attrs={'data-placeholder': 'Choose Restaurants'})
     )
 
     class Meta:

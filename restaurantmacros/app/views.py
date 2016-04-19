@@ -56,7 +56,6 @@ def food(request):
 
 
 def results(request):
-    print(request)
     calories = request.GET['calories']
     protein = request.GET['protein']
     fat = request.GET['fat']
