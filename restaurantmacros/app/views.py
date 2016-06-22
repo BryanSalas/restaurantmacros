@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from nutritionix import Nutritionix
 
@@ -55,53 +56,69 @@ def food(request):
     return render(request, 'food.html', {'activeTab': 'foodTab'})
 
 
+def add_food(request):
+    print("AYE")
+    return HttpResponse(status=200)
+
+
 def results(request):
     calories = request.GET['calories']
     protein = request.GET['protein']
     fat = request.GET['fat']
     carbs = request.GET['carbs']
 
+    search_filters = {}
+
+    if calories:
+        search_filters["nf_calories"] = {"lte": calories}
+    if protein:
+        search_filters["nf_protein"] = {"lte": protein}
+    if fat:
+        search_filters["nf_total_fat"] = {"lte": fat}
+    if carbs:
+        search_filters["nf_total_carbohydrate"] = {"lte": carbs}
+
     restaurant_ids = request.GET.getlist('restaurants')
 
+    # all food items that fit criteria
     items = []
 
+    # search all restaurants given
     for restaurant_id in restaurant_ids:
         cur_rest = Restaurant.objects.filter(id=restaurant_id)[0]
         brand_id = cur_rest.brand_id
 
-        search_results = nix.search().nxql(
-            filters={
-                "brand_id": brand_id,
-                "nf_calories": {
-                    "lte": calories
-                },
-                "nf_protein": {
-                    "lte": protein
-                },
-                "nf_total_fat": {
-                    "lte": fat
-                },
-                "nf_total_carbohydrate": {
-                    "lte": carbs
-                }
-            },
-            fields=["item_name", "brand_name", "brand_id", "nf_calories", "nf_protein", "nf_total_fat",
-                    "nf_total_carbohydrate"],
-            sort={
-                "field": "item_name.sortable_na",
-                "order": "asc"
-            },
-            offset=0,
-            limit=50
-        ).json()
+        search_filters["brand_id"] = brand_id
 
-        for hit in search_results['hits']:
-            fields = hit['fields']
-            items.append(Food(name=fields['item_name'],
-                              calories=fields['nf_calories'],
-                              protein=fields['nf_protein'],
-                              fat=fields['nf_total_fat'],
-                              carbs=fields['nf_total_carbohydrate'],
-                              restaurant=cur_rest))
+        cur_offset = 0
+        total_results = 50
+
+        # get all results from restaurant
+        while cur_offset < total_results:
+            # make call to nix to get foods that fit criteria
+            search_results = nix.search().nxql(
+                filters=search_filters,
+                fields=["item_name", "brand_name", "brand_id", "nf_calories", "nf_protein", "nf_total_fat",
+                        "nf_total_carbohydrate"],
+                sort={
+                    "field": "item_name.sortable_na",
+                    "order": "asc"
+                },
+                offset=cur_offset,
+                limit=50
+            ).json()
+
+            for hit in search_results['hits']:
+                fields = hit['fields']
+                items.append(Food(item_id=hit['_id'],
+                                  name=fields['item_name'],
+                                  calories=fields['nf_calories'],
+                                  protein=fields['nf_protein'],
+                                  fat=fields['nf_total_fat'],
+                                  carbs=fields['nf_total_carbohydrate'],
+                                  restaurant=cur_rest))
+
+            cur_offset += 50
+            total_results = search_results["total"]
 
     return render(request, 'results.html', {'items': items})
