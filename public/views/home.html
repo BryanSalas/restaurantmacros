@@ -1,0 +1,19 @@
+<div class="rm-home">
+    <h1>{{header}}</h1>
+    <p>Set the goal amount for each macro, leave blank to indicate any amount. Choose restaurants to search for food within.</p>
+
+    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;" ng-repeat="macro in macros">
+        <div style="min-width: 100px;">{{macro.name}}</div>
+        <input style="" type="number" ng-model="macro.value" placeholder="Any" class="form-control"/>
+    </div>
+
+    <div style="display: flex; flex-direction: row; align-items: center; margin-top: 10px;">
+        <div style="min-width: 100px;">Restaurant</div>
+        <input style="width: 250px;" type="text" ng-model="brand_name" class="form-control" placeholder="Restaurant">
+    </div>
+
+
+    <div style="margin-top: 45px;" class="btn btn-lg btn-success" ng-click="doSearch();">Go</div>
+</div>
+
+

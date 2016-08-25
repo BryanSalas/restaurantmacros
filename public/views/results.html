@@ -1,0 +1,26 @@
+<table class="table table-striped sortable table-fixed-header">
+    <thead class="header">
+        <tr>
+            <th></th>
+            <th data-defaultsort="asc" data-defaultsign="reversed">Restaurant</th>
+            <th data-firstsort="asc" data-defaultsign="reversed">Food</th>
+            <th data-firstsort="desc" data-defaultsign="reversed">Calories</th>
+            <th data-firstsort="desc" data-defaultsign="reversed">Carbs</th>
+            <th data-firstsort="desc" data-defaultsign="reversed">Fat</th>
+            <th data-firstsort="desc" data-defaultsign="reversed">Protein</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="hit in hits">
+            <td>
+                <button type="button" class="btn btn-success">add</button>
+            </td>
+            <td>{{hit.fields.brand_name}}</td>
+            <td>{{hit.fields.item_name}}</td>
+            <td>{{hit.fields.nf_calories}}</td>
+            <td>{{hit.fields.nf_total_carbohydrate}}</td>
+            <td>{{hit.fields.nf_total_fat}}</td>
+            <td>{{hit.fields.nf_protein}}</td>
+        </tr>
+    </tbody>
+</table>
