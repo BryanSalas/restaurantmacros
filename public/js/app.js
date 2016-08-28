@@ -1,4 +1,9 @@
-define(['angularAMD', 'angular-route'], function (angularAMD) {
+define(['angularAMD',
+        'angular-route',
+        'bootstrap',
+        'typeahead',
+        'bloodhound'],
+        function (angularAMD) {
     var app = angular.module("sampleApp", ['ngRoute']);
     app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
         $routeProvider

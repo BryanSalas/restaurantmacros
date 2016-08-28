@@ -1,3 +1,5 @@
+@main-grey: #eee;
+@border-grey: #d4d4d4;
 @font-face {
     font-family: 'oswaldregular';
     src: url('../fonts/oswald-normal-normal.ttf') format('truetype');
@@ -8,27 +10,33 @@
     src: url('../fonts/oswald-bold-normal.ttf') format('truetype');
 }
 
+.nav.navbar-nav {
+    padding-top: 23px;
+    padding-left: 15px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 body {
+  margin-bottom: 60px;
   font-family: oswaldregular;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  background-color: #f5f5f5;
+  text-align:center;
 }
 
 .container {
     font-size: 20px;
     width: 65%;
-}
-
-// home page
-.rm-home {
-    .form-control {
-        width: 85px;
-        display: inline-block;
-        height: 100%;
-        font-size: 100%;
-    }
-}
-
-.form-inline {
-    padding-top: 10px;
 }
 
 .jumbotron {
@@ -37,8 +45,159 @@ body {
     padding:15px;
 }
 
-.jumbotron p {
-    margin-bottom: 30px;
+.rm-visible {
+    visibility: visible;
+}
+
+.rm-hidden {
+    visibility: hidden;
+}
+
+// glyphicons
+.glyphicon {
+    &.glyphicon-remove {
+        padding: 5px;
+
+        &:hover {
+            background: @main-grey;
+            cursor: pointer;
+        }
+    }
+}
+
+// left panel on home and results page
+.panel-body {
+    border-bottom: 1px solid @border-grey;
+}
+
+
+// home page
+.rm-home {
+    .form-control {
+        width: 85px;
+        display: inline-block;
+        height: 100%;
+        font-size: 100%;
+
+        &.warning {
+            border-color: #c70000;
+            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px #c70000;
+        }
+    }
+
+    .twitter-typeahead {
+        width: 100%;
+    }
+
+    .typeahead,
+    .tt-query,
+    .tt-hint {
+      width: 396px;
+      padding: 8px 12px;
+      line-height: 30px;
+      -webkit-border-radius: 8px;
+         -moz-border-radius: 8px;
+              border-radius: 8px;
+      outline: none;
+    }
+
+    .typeahead {
+      background-color: #fff;
+    }
+
+    .tt-query {
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+         -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    }
+
+    .tt-hint {
+      color: #999
+    }
+
+    .tt-menu {
+      width: 100%;
+      margin: 12px 0;
+      padding: 8px 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      -webkit-border-radius: 8px;
+         -moz-border-radius: 8px;
+              border-radius: 8px;
+      -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+         -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+              box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    }
+
+    .tt-suggestion {
+      padding: 3px 20px;
+      font-size: 18px;
+      line-height: 24px;
+    }
+
+    .tt-suggestion:hover {
+      cursor: pointer;
+      color: #fff;
+      background-color: #0097cf;
+    }
+
+    .tt-suggestion.tt-cursor {
+      color: #fff;
+      background-color: #0097cf;
+
+    }
+
+    .tt-suggestion p {
+      margin: 0;
+    }
+
+    .gist {
+      font-size: 14px;
+    }
+
+    /* example specific styles */
+    /* ----------------------- */
+
+    #custom-templates .empty-message {
+      padding: 5px 10px;
+     text-align: center;
+    }
+
+    #multiple-datasets .league-name {
+      margin: 0 20px 5px 20px;
+      padding: 3px 0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    #scrollable-dropdown-menu .tt-menu {
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    #rtl-support .tt-menu {
+      text-align: right;
+    }
+
+    .dropdown-menu {
+        width: 250px;
+    }
+}
+
+// results page
+.rm-results {
+    .panel-body {
+        &.selected {
+            background-color: @main-grey;
+        }
+        &:hover {
+            background-color: @main-grey;
+            cursor: pointer;
+        }
+    }
+}
+.form-inline {
+    padding-top: 10px;
 }
 
 /* Calories, Protein etc... labels */
@@ -57,63 +216,6 @@ h1 {
     margin-bottom: 27px;
 }
 
-a {
-    font-size: 21px;
-}
-
-@media screen and (max-width: 768px) {
-    a {
-        font-size: 14px;
-    }
-}
-
 img {
-        width: 314px;
-}
-
-@media screen and (max-width: 768px) {
-    img {
-        width: 200px;
-    }
-}
-
-.nav.navbar-nav {
-    padding-top: 23px;
-    padding-left: 15px;
-}
-
-@media screen and (max-width: 768px) {
-    .nav.navbar-nav {
-        padding-top: 0px;
-    }
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 80px;
-  background-color: #f5f5f5;
-  text-align:center;
-}
-
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
-
-
-.container .text-muted {
-  margin: 20px 0;
+    width: 314px;
 }

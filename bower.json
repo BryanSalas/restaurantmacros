@@ -8,7 +8,8 @@
     "angular": "latest",
     "angular-route": "latest",
     "requirejs": "latest",
-    "angularAMD": "latest"
+    "angularAMD": "latest",
+    "typeahead.js": "latest"
   },
   "resolutions": {
     "angular": "1.5.8"
