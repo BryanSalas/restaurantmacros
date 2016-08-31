@@ -14,7 +14,7 @@
         <!-- JS -->
        <script data-main="js/main.js" src="libs/requirejs/require.js"></script>
     </head>
-    <body>
+    <body  ng-controller="mainCtrl">
         <!-- Fixed navbar -->
         <nav class="navbar navbar-default navbar-fixed-top">
           <div class="container">
@@ -29,7 +29,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
               <ul class="nav navbar-nav">
-                <li id="homeTab"><a href="/">Home</a></li>
+                  <li ng-repeat="tab in nav_tabs" ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
                 <!-- <li id="restaurantsTab"><a href="/restaurants">Restaurants</a></li>
                 <li id="foodTab"><a href="/food">Food</a></li> -->
                 <!-- <li class="dropdown">
@@ -45,19 +45,15 @@
                   </ul>
                 </li> -->
               </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href="/">Log in</a></li>
-                <li><a href="/">Sign up</a></li>
-                <!-- <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li> -->
-              </ul>
+              <!--<ul class="nav navbar-nav navbar-right">-->
+                <!--<li><a href="/">Log in</a></li>-->
+                <!--<li><a href="/">Sign up</a></li>-->
+                <!--&lt;!&ndash; <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li> &ndash;&gt;-->
+              <!--</ul>-->
             </div><!--/.nav-collapse -->
           </div>
         </nav>
-        <div style="margin-top: 95px;" class="container">
-            <div class="jumbotron">
-                <div ng-view></div>
-            </div>
-        </div>
+        <div ng-view></div>
         <footer class="footer">
               <div class="container">
                   <p>Restaurant Macros was developed by Bryan Salas</p>

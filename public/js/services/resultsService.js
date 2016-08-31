@@ -18,10 +18,6 @@ define(['app'], function (app) {
                 return $http(req).then(onSuccess, onError);
 
                 function onSuccess(result) {
-                    for(index in result) {
-                        curResult = result[index];
-
-                    }
                     search_result = result.data;
                 }
 

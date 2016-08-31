@@ -1,5 +1,6 @@
 define(['app', 'services/resultsService'], function (app) {
-    app.controller('rmResults', ['$scope', 'rmResultsService', '$location', function($scope, $service, $location) {
+    app.controller('rmResults', ['$scope', 'rmResultsService', '$location', '$window',
+    function($scope, $service, $location, $window) {
         $scope.results = $service.get();
 
         if(!$scope.results) {
@@ -17,8 +18,21 @@ define(['app', 'services/resultsService'], function (app) {
             }
         }
 
+        $scope.tab_selected = "food";
+
         $scope.selectRestaurant = function(result) {
             $scope.selected_restaurant = result;
         }
+
+        // handle fixed header
+        angular.element($window).bind("scroll", function() {
+            if (this.pageYOffset >= 77) {
+                $scope.fixed_header = true;
+            } else {
+                $scope.fixed_header = false;
+            }
+            $scope.fixed_width = {'width': $('.food-header').width() + "px"};
+            $scope.$apply();
+        });
     }]);
 });

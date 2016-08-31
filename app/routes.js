@@ -27,18 +27,19 @@ var request = require('request');
         app.post('/api/results', function(req, res) {
             var results = [];
             for(index in req.body.brands) {
-                searchRestaurant(req.body.brands[index]._id, req.body.brands[index].name);
+                searchRestaurant(req.body.brands[index]._id, req.body.brands[index].name, 0, {});
             }
-            function searchRestaurant(brand_id, brand_name) {
+            function searchRestaurant(brand_id, brand_name, curOffset, all_hits) {
                 request.post(
                     'https://api.nutritionix.com/v1_1/search',
                     { json:
                         {
                             "appId": app.locals.APP_ID,
                             "appKey": app.locals.APP_KEY,
-                            "offset": 0,
+                            "offset": curOffset,
                             "limit": 50,
-                            "fields":["item_name", "brand_id", "brand_name","nf_calories", "nf_total_carbohydrate", "nf_total_fat", "nf_protein"],
+                            "fields":["item_name", "brand_id",
+                                "brand_name","nf_calories", "nf_total_carbohydrate", "nf_total_fat", "nf_protein"],
                             "filters": {
                                 "brand_id": brand_id,
                                 "nf_calories": {
@@ -57,13 +58,30 @@ var request = require('request');
                         }
                     },
                     function (error, response, body) {
-                        body["brand_id"] = brand_id;
-                        body["brand_name"] = brand_name;
                         if (!error && response.statusCode == 200) {
-                            results.push(body);
-                            if(results.length == req.body.brands.length) {
-                                res.json(results);
+                            // found all items that match query
+                            if(curOffset > body.total) {
+                                all_hits["brand_id"] = brand_id;
+                                all_hits["brand_name"] = brand_name;
+                                results.push(all_hits);
+
+                                // final set of results, return array of results
+                                if(results.length == req.body.brands.length) {
+                                    res.json(results);
+                                }
                             }
+                            // still have more matches to add to hits
+                            else {
+                                if(curOffset == 0) {
+                                    all_hits = body;
+                                }
+                                else {
+                                    all_hits["hits"] = all_hits["hits"].concat(body.hits);
+                                }
+                                curOffset += 50;
+                                searchRestaurant(brand_id, brand_name, curOffset, all_hits);
+                            }
+
                         }
                         else {
                             res.sendStatus(500);
