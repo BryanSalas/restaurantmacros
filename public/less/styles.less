@@ -53,12 +53,26 @@ body {
     display: inline-block;
 }
 
+// custom global classes
 .rm-visible {
     visibility: visible;
 }
 
 .rm-hidden {
     visibility: hidden;
+}
+
+.small-font {
+    font-size: 16px;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+
+    &.align-center {
+        align-items: center;
+    }
 }
 
 // glyphicons
@@ -76,13 +90,14 @@ body {
 // left panel on home and results page
 .panel-body {
     border-bottom: 1px solid @border-grey;
+    text-align: left;
 }
 .panel-heading {
     background-color: white!important;
 }
 
 
-// home page
+// search page
 .rm-search {
     text-align: center;
     .form-control {
@@ -217,8 +232,50 @@ body {
             position: fixed;
             background: white;
             top: 95px;
+            z-index: 1;
         }
     }
+
+    .food-row {
+        td:not(:first-child):not(:last-child) {
+            >div {
+                margin-right: 25px;
+            }
+        }
+
+        th {
+            &:hover:not(:last-child) {
+                cursor: pointer;
+                background-color: @main-grey;
+            }
+        }
+    }
+
+    table {
+        text-align: left;
+
+        th {
+            white-space: nowrap;
+            &.first {
+                width: 70%;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background-color: @main-grey;
+            }
+
+
+            >span {
+                vertical-align: middle;
+                display: inline-block;
+                width: 20px;
+                margin-bottom: 3px;
+            }
+        }
+    }
+
+
 }
 .form-inline {
     padding-top: 10px;

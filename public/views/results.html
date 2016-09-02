@@ -24,60 +24,102 @@
                         <a href="" ng-click="tab_selected = 'meals'">Meals</a>
                     </li>
                 </ul>
-                <table ng-if="fixed_header" style="text-align: left; margin-bottom: 0;" ng-if="tab_selected == 'food'" class="table table-striped">
+
+                <!-- food table fixed header -->
+                <table ng-if="fixed_header" style="text-align: left; margin-bottom: 0;" ng-if="tab_selected == 'food'"
+                       class="table table-striped">
                     <thead class="header">
                         <tr>
-                            <th style="width: 70%;">Food</th>
-                            <th>Calories</th>
-                            <th>Carbs</th>
-                            <th>Fat</th>
-                            <th>Protein</th>
+                            <th ng-repeat="header in food_headers" ng-click="sortBy(header.key, true)" ng-class="{'first': $first}">
+                                {{header.name}}
+                                <span ng-class="{'glyphicon glyphicon-chevron-down': food_sort_by == header.key && !food_reverse_order,
+                                'glyphicon glyphicon-chevron-up': food_sort_by == header.key && food_reverse_order}"/>
+                            </th>
+                            <th>
+                                <div style="width: 40px;"></div>
+                            </th>
                         </tr>
                     </thead>
                 </table>
             </div>
+
             <div ng-if="fixed_header" style="height: 142px;"></div>
 
             <!-- food section -->
-            <table style="text-align: left;" ng-if="tab_selected == 'food'" class="table table-striped">
-                <thead class="header food-header">
-                    <tr>
-                        <th style="width: 70%;">Food</th>
-                        <th>Calories</th>
-                        <th>Carbs</th>
-                        <th>Fat</th>
-                        <th>Protein</th>
+            <table ng-if="tab_selected == 'food'" class="table table-striped">
+                <thead class="header">
+                    <tr ng-class="{'rm-hidden': fixed_header}" class="food-header">
+                        <th ng-repeat="header in food_headers" ng-click="sortBy(header.key, true)"
+                            ng-class="{'first': $first}">
+                            {{header.name}}
+                            <span ng-class="{'glyphicon glyphicon-chevron-down': food_sort_by == header.key && !food_reverse_order,
+                                'glyphicon glyphicon-chevron-up': food_sort_by == header.key && food_reverse_order}"/>
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="hit in selected_restaurant.hits" class="food-row">
+                    <tr ng-repeat="hit in selected_restaurant.hits | orderBy : 'fields.' + food_sort_by : food_reverse_order"
+                        class="food-row">
                         <td>{{hit.fields.item_name}}</td>
-                        <td>{{hit.fields.nf_calories}}</td>
-                        <td>{{hit.fields.nf_total_carbohydrate}}</td>
-                        <td>{{hit.fields.nf_total_fat}}</td>
-                        <td>{{hit.fields.nf_protein}}</td>
+                        <td class="text-right">
+                            <div>{{hit.fields.nf_calories}}</div>
+                        </td>
+                        <td class="text-right">
+                            <div>{{hit.fields.nf_total_carbohydrate}}</div>
+                        </td>
+                        <td class="text-right">
+                            <div>{{hit.fields.nf_total_fat}}</div>
+                        </td>
+                        <td class="text-right">
+                            <div>{{hit.fields.nf_protein}}</div>
+                        </td>
+                        <td>
+                            <div style="display: inline-block;" class="dropdown">
+                              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                  <span class="glyphicon glyphicon-triangle-bottom"></span>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                  <li ng-if="meals.length > 0" class="dropdown-header">Add to meal</li>
+                                  <li ng-click="addToMeal(hit.fields, $index);" ng-repeat="meal in meals">
+                                      <a href="#">{{meal.name}}</a>
+                                  </li>
+                              </ul>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
 
             <!-- meals section -->
-            <table style="text-align: left;" ng-if="tab_selected == 'meals'" class="table">
+            <div style="margin-bottom: 15px;" class="flex-row align-center">
+                <div style="width: 25%;">
+                    <form ng-submit="addMeal();">
+                         <input class="form-control" ng-model="new_meal" placeholder="Meal name"/>
+                    </form>
+                </div>
+                <div style="margin-left: 20px;" ng-click="addMeal();" class="btn btn-sm btn-primary">Add new meal</div>
+            </div>
+            <table style="text-align: left;" ng-if="tab_selected == 'meals'" class="table" ng-style="fixed_width">
                 <thead class="header meal-header">
-                    <tr>
-                        <th style="width: 70%;">Food</th>
-                        <th>Calories</th>
-                        <th>Carbs</th>
-                        <th>Fat</th>
-                        <th>Protein</th>
+                    <tr ng-class="{'rm-hidden': fixed_header}" class="meal-header">
+                        <th ng-repeat="header in meal_headers" ng-click="sortBy(header.key, false)"
+                            ng-class="{'first': $first}">
+                            {{header.name}}
+                            <span ng-class="{'glyphicon glyphicon-chevron-down': meal_sort_by == header.key && !meal_reverse_order,
+                                'glyphicon glyphicon-chevron-up': meal_sort_by == header.key && meal_reverse_order}"/>
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="hit in selected_restaurant.hits">
-                        <td>{{hit.fields.item_name}}</td>
-                        <td>{{hit.fields.nf_calories}}</td>
-                        <td>{{hit.fields.nf_total_carbohydrate}}</td>
-                        <td>{{hit.fields.nf_total_fat}}</td>
-                        <td>{{hit.fields.nf_protein}}</td>
+                    <tr ng-repeat="meal in meals | orderBy : meal_sort_by : meal_reverse_order">
+                        <td>{{meal.name}}</td>
+                        <td>{{meal.calories}}</td>
+                        <td>{{meal.carbs}}</td>
+                        <td>{{meal.fat}}</td>
+                        <td>{{meal.protein}}</td>
                     </tr>
                 </tbody>
             </table>
