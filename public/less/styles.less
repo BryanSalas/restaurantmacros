@@ -66,6 +66,10 @@ body {
     font-size: 16px;
 }
 
+.font-bold {
+    font-weight: bold;
+}
+
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -73,6 +77,10 @@ body {
     &.align-center {
         align-items: center;
     }
+}
+
+.no-hover {
+    pointer-events: none;
 }
 
 // glyphicons
@@ -272,6 +280,28 @@ body {
                 width: 20px;
                 margin-bottom: 3px;
             }
+        }
+    }
+
+    .meal-data {
+        margin-bottom: 20px;
+        display: inline-block;
+    }
+
+    .food-in-meal {
+        margin-bottom: 10px;
+        line-height: 30px;
+    }
+
+    .glyphicon-triangle-right {
+        transition: transform .3s ease;
+        &:hover {
+            cursor: pointer;
+        }
+
+        &.open {
+            transform: rotate(90deg);
+            margin-bottom: 24px;
         }
     }
 

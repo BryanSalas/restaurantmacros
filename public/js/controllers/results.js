@@ -20,28 +20,53 @@ define(['app', 'services/resultsService'], function (app) {
         }
 
         else {
-            $scope.meals = [];
             $scope.selected_restaurant = $scope.results[0];
-
-            $scope.addMeal = function() {
-                if($scope.new_meal) {
-                    $scope.meals.push({"name": $scope.new_meal, "calories": 0, "carbs": 0, "fat": 0, "protein": 0, "food": []});
-                    $scope.new_meal = null;
-                }
-            }
-
-            $scope.tab_selected = "food";
+            $scope.selected_restaurant.meals = [];
+            $scope.selected_restaurant.search = "";
+            $scope.selected_restaurant.tab_selected = "food";
 
             $scope.selectRestaurant = function(result) {
                 $scope.selected_restaurant = result;
+                if(!$scope.selected_restaurant.meals) {
+                    $scope.selected_restaurant.meals = [];
+                }
+
+                if(!$scope.selected_restaurant.tab_selected) {
+                    $scope.selected_restaurant.tab_selected = "food";
+                }
+
+                if(!$scope.selected_restaurant.search) {
+                    $scope.selected_restaurant.search = "";
+                }
+            }
+
+            // meals
+            $scope.addMeal = function() {
+                if($scope.selected_restaurant.new_meal) {
+                    $scope.selected_restaurant.meals.push({"name": $scope.selected_restaurant.new_meal, "calories": 0, "carbs": 0, "fat": 0, "protein": 0, "food": [], "open": false});
+                    $scope.selected_restaurant.new_meal = null;
+                }
+            }
+
+            $scope.createMealFromFood = function(food) {
+                $scope.selected_restaurant.tab_selected = "meals";
             }
 
             $scope.addToMeal = function(food, index) {
-                $scope.meals[index].food.push(food);
-                $scope.meals[index].calories += food.nf_calories;
-                $scope.meals[index].carbs += food.nf_total_carbohydrate;
-                $scope.meals[index].fat += food.nf_total_fat;
-                $scope.meals[index].protein += food.nf_protein;
+                $scope.selected_restaurant.meals[index].food.push(food);
+                $scope.selected_restaurant.meals[index].calories += food.nf_calories;
+                $scope.selected_restaurant.meals[index].carbs += food.nf_total_carbohydrate;
+                $scope.selected_restaurant.meals[index].fat += food.nf_total_fat;
+                $scope.selected_restaurant.meals[index].protein += food.nf_protein;
+            }
+
+            $scope.removeFood = function(meal, index) {
+                meal.calories -= meal.food[index].nf_calories;
+                meal.carbs -= meal.food[index].nf_total_carbohydrate;
+                meal.fat -= meal.food[index].nf_total_fat;
+                meal.protein -= meal.food[index].nf_protein;
+
+                meal.food.splice(index, 1);
             }
 
             // sort by name by default
