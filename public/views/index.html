@@ -14,7 +14,7 @@
         <!-- JS -->
        <script data-main="js/main.js" src="libs/requirejs/require.js"></script>
     </head>
-    <body  ng-controller="mainCtrl">
+    <body ng-cloak ng-controller="mainCtrl">
         <!-- Fixed navbar -->
         <nav class="navbar navbar-default navbar-fixed-top">
           <div class="container">
@@ -53,6 +53,15 @@
             </div><!--/.nav-collapse -->
           </div>
         </nav>
+        <!-- alerts -->
+        <div style="text-align: center;">
+            <div id="alert-box" ng-class="{'fade-hidden': hide_alert}" class="alert rm-fade alert-dismissible" role="alert">
+                <button type="button" ng-click="hideAlert();"  class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{alert_text}}
+            </div>
+        </div>
         <div ng-view></div>
         <footer class="footer">
               <div class="container">

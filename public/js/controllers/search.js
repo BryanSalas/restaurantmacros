@@ -13,6 +13,7 @@ define(['app',
                         "protein": {"name": "Protein", "value": null}};
 
         $scope.doSearch = function() {
+            $scope.$emit('showAlert', ["Searching...", "success"]);
             $service.search({calories: $scope.macros.calories.value,
                             carbs: $scope.macros.carbs.value,
                             fat: $scope.macros.fat.value,
@@ -75,12 +76,14 @@ define(['app',
                 $scope.$apply(function () {
                     $scope.already_selected = null;
                     $scope.selected_restaurants.push(item);
+                    $scope.$emit('showAlert', ["Successfully added " + item.name, "success"]);
                 });
                 $('.typeahead').typeahead('val','');
             }
             else {
                 $scope.$apply(function () {
                     $scope.already_selected = item.name;
+                    $scope.$emit('showAlert', ["Already added " + item.name, "danger"]);
                 });
             }
         });

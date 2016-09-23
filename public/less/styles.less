@@ -10,6 +10,10 @@
     src: url('../fonts/oswald-bold-normal.ttf') format('truetype');
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
 .nav.navbar-nav {
     padding-top: 23px;
     padding-left: 15px;
@@ -46,20 +50,41 @@ body {
 }
 
 .jumbotron {
-    margin-top: 50px;
+    margin-top: 25px;
     box-shadow: 0 0 2px black;
-    padding:15px;
+    padding: 15px;
     background-color: white;
     display: inline-block;
 }
 
 // custom global classes
+.alert {
+    margin-top: 105px;
+    font-size: 16px;
+    margin-bottom: 0;
+    width: 50%;
+    display: inline-block;
+}
+
 .rm-visible {
     visibility: visible;
 }
 
 .rm-hidden {
     visibility: hidden;
+}
+
+.rm-fade {
+    transition: opacity .3s ease;
+    opacity: 1;
+
+    &.fade-hidden {
+        opacity: 0;
+    }
+}
+
+.text-left {
+    text-align: left;
 }
 
 .small-font {
@@ -77,6 +102,14 @@ body {
     &.align-center {
         align-items: center;
     }
+
+    &.justify-center {
+        justify-content: center;
+    }
+}
+
+.flex-one {
+    flex: 1;
 }
 
 .no-hover {
@@ -96,6 +129,12 @@ body {
 }
 
 // left panel on home and results page
+.panel {
+    position: fixed;
+    left: 25px;
+    width: 15%;
+    top: 181px;
+}
 .panel-body {
     border-bottom: 1px solid @border-grey;
     text-align: left;
@@ -121,7 +160,7 @@ body {
     }
 
     .twitter-typeahead {
-        width: 677px;
+        width: 100%;
     }
 
     .typeahead,
@@ -138,6 +177,7 @@ body {
 
     .typeahead {
       background-color: #fff;
+      width: 100%;
     }
 
     .tt-query {
@@ -241,6 +281,39 @@ body {
             background: white;
             top: 95px;
             z-index: 1;
+        }
+
+        .restaurant-name {
+            text-align: left;
+            font-size: 54px;
+            margin-bottom: 20px;
+        }
+
+        .flex-row.align-center {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            white-space: nowrap;
+            margin-right: 10px;
+            min-width: 100px;
+        }
+
+        input {
+            width: 210px;
+        }
+
+        .add-meal-button {
+            margin-left: 10px;
+        }
+
+        .nav.nav-tabs {
+            margin-bottom: 15px;
+        }
+
+        .fixed-header-table {
+            text-align: left;
+            margin-bottom: 0;
         }
     }
 

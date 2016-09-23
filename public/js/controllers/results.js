@@ -43,13 +43,19 @@ define(['app', 'services/resultsService'], function (app) {
             // meals
             $scope.addMeal = function() {
                 if($scope.selected_restaurant.new_meal) {
-                    $scope.selected_restaurant.meals.push({"name": $scope.selected_restaurant.new_meal, "calories": 0, "carbs": 0, "fat": 0, "protein": 0, "food": [], "open": false});
+                    $scope.selected_restaurant.meals.push({"name": $scope.selected_restaurant.new_meal, "calories": 0,
+                    "carbs": 0, "fat": 0, "protein": 0, "food": [], "open": false});
+                    if($scope.food_to_add) {
+                    $scope.addToMeal($scope.food_to_add, $scope.selected_restaurant.meals.length - 1);
+                    }
                     $scope.selected_restaurant.new_meal = null;
+                    $scope.food_to_add = null;
                 }
             }
 
             $scope.createMealFromFood = function(food) {
                 $scope.selected_restaurant.tab_selected = "meals";
+                $scope.food_to_add = food;
             }
 
             $scope.addToMeal = function(food, index) {
@@ -104,7 +110,7 @@ define(['app', 'services/resultsService'], function (app) {
 
             // handle fixed header
             angular.element($window).bind("scroll", function() {
-                if (this.pageYOffset >= 77) {
+                if (this.pageYOffset >= 85) {
                     $scope.fixed_header = true;
                 } else {
                     $scope.fixed_header = false;

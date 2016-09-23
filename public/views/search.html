@@ -1,28 +1,27 @@
-<div style="margin-top: 95px;" class="container">
+<div class="container">
     <div class="jumbotron">
         <div class="rm-search">
             <!--<h1>Still count macros while eating out.</h1>-->
             <p>Select which restaurants to search, then set a goal amount for each macro and hit go!</p>
 
-            <div style="position: absolute; left: 25px; width: 15%; top: 145px;" class="panel panel-default">
+            <div ng-if="selected_restaurants.length > 0;" class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Restaurants to search</h3>
                 </div>
                 <div ng-repeat="rest in selected_restaurants" class="panel-body">
-                    <div style="display: flex; flex-direction: row; align-items: center">
-                        <div style="flex: 1;">{{rest.name}}</div>
+                    <div class="flex-row align-center">
+                        <div class="flex-one">{{rest.name}}</div>
                         <span class="glyphicon glyphicon-remove" ng-click="selected_restaurants.splice($index,1);"></span>
                     </div>
                 </div>
             </div>
 
-            <!--<div ng-class="already_selected ? 'rm-visible' : 'rm-hidden'">Already selected {{already_selected}}!</div>-->
-            <input style="width: 100%;" ng-class="{'warning': already_selected}" class="typeahead form-control"
-                   autocomplete="off" type="text" id="restaurant" placeholder="Select Restaurants"
+            <input ng-class="{'warning': already_selected}" class="typeahead form-control"
+                   autocomplete="off" type="text" id="restaurant" placeholder="Start typing to select restaurants"
                    ng-model="selected_restaurant" ng-change="selectedRestChanged();">
 
-            <div style="display: flex; flex-direction: row; margin-top: 15px; justify-content: center;">
-                <div style="display: flex; flex-direction: row; align-items: center; margin-left: 10px;" ng-repeat="macro in macros">
+            <div class="flex-row justify-center" style="margin-top: 15px;">
+                <div style="margin-left: 10px;" class="flex-row align-center" ng-repeat="macro in macros">
                     <div style="margin-right: 10px;">{{macro.name}}</div>
                     <input style="" type="number" ng-model="macro.value" placeholder="Any" class="form-control"/>
                 </div>
