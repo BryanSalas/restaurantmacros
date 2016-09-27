@@ -23,7 +23,7 @@
             <div class="flex-row justify-center" style="margin-top: 15px;">
                 <div style="margin-left: 10px;" class="flex-row align-center" ng-repeat="macro in macros">
                     <div style="margin-right: 10px;">{{macro.name}}</div>
-                    <input style="" type="number" ng-model="macro.value" placeholder="Any" class="form-control"/>
+                    <input style="" min="0" type="number" ng-model="macro.value" placeholder="Any" class="form-control"/>
                 </div>
                 <div style="margin-left: 15px;" class="btn btn-lg btn-success" ng-click="doSearch();">Go</div>
             </div>
