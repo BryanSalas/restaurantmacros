@@ -50,7 +50,6 @@ define(['angularAMD',
             $scope.alert_type = args[1];
             $scope.hide_alert = false;
             $('#alert-box').addClass("alert-" + $scope.alert_type);
-            console.log($scope.alert_type);
             // hide alert box after 1.5 sec
             if($scope.alert_type != 'danger') {
                  $scope.hide_alert_promise = $timeout(function() {

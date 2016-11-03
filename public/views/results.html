@@ -15,7 +15,6 @@
 
             <!-- fixed header -->
             <div class="results-header" ng-class="{'fixed-header': fixed_header}" ng-style="fixed_width">
-                <div class="restaurant-name">{{selected_restaurant.brand_name}}</div>
                 <div ng-show="selected_restaurant.tab_selected == 'food'" class="flex-row align-center">
                     <div class="input-label">Search Food: </div>
                     <input class="form-control" ng-model="selected_restaurant.search" placeholder="Food name"/>

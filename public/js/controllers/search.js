@@ -13,12 +13,17 @@ define(['app',
                         "protein": {"name": "Protein", "value": null}};
 
         $scope.doSearch = function() {
-            $scope.$emit('showAlert', ["Searching...", "success"]);
-            $service.search({calories: $scope.macros.calories.value,
-                            carbs: $scope.macros.carbs.value,
-                            fat: $scope.macros.fat.value,
-                            protein: $scope.macros.protein.value,
-                            brands: $scope.selected_restaurants}).then(onSuccess, onError);
+            if(validateInput()) {
+                $service.search({calories: $scope.macros.calories.value,
+                                carbs: $scope.macros.carbs.value,
+                                fat: $scope.macros.fat.value,
+                                protein: $scope.macros.protein.value,
+                                brands: $scope.selected_restaurants}).then(onSuccess, onError);
+                $scope.showLoading = true;
+            }
+            else {
+                return;
+            }
         }
 
         function onSuccess(result) {
@@ -27,6 +32,30 @@ define(['app',
 
         function onError(result) {
             console.log("error");
+        }
+
+        function validateInput() {
+            var found_error = false;
+            $scope.no_rest_selected = false;
+            for (var key in $scope.macros) {
+                var macro = $scope.macros[key];
+                if (!$scope.macros.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                if(macro.value < 0) {
+                    macro.error = true;
+                    macro.error_text = "Must be non-negative";
+                    found_error = true;
+                }
+            }
+
+            if($scope.selected_restaurants.length == 0) {
+                $scope.no_rest_selected = true;
+                found_error = true;
+            }
+
+            return !found_error;
         }
 
         $scope.displayText = function(item) {
@@ -39,6 +68,7 @@ define(['app',
 
         $scope.selectedRestChanged = function() {
             $scope.already_selected = null;
+            $scope.no_rest_selected = false;
         }
 
         $restaurantService.get().then(

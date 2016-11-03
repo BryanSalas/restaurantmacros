@@ -19,6 +19,7 @@ fs.readFile('./public/less/styles.less', function(err,styles) {
         if(er) return console.error(er);
         fs.writeFile('./public/css/styles.css', output.css, function(e) {
             if(e) return console.error(e);
+            console.log('Successfully compiled less');
         });
     });
 });
@@ -56,7 +57,7 @@ require('./app/routes')(app); // configure our routes
 app.listen(port);
 
 // shoutout to the user
-console.log('Magic happens on port ' + port);
+console.log('Running restaurantmacros on ' + port);
 
 // expose app
 exports = module.exports = app;
