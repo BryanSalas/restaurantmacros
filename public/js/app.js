@@ -63,6 +63,10 @@ define(['angularAMD',
             $('#alert-box').removeClass("alert-" + $scope.alert_type);
         }
 
+        $scope.$on('hideAlert', function(event, args) {
+            $scope.hideAlert();
+        });
+
 	});
 
     return angularAMD.bootstrap(app);

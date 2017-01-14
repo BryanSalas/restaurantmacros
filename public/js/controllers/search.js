@@ -7,6 +7,8 @@ define(['app',
 
         $scope.selected_restaurants = [];
 
+        $scope.max_restaurants = 5;
+
         $scope.macros = {"calories": {"name": "Calories", "value": null},
                         "carbs": {"name": "Carbs", "value": null},
                         "fat": {"name": "Fat", "value": null},
@@ -14,6 +16,7 @@ define(['app',
 
         $scope.doSearch = function() {
             if(validateInput()) {
+                $scope.$emit('hideAlert');
                 $service.search({calories: $scope.macros.calories.value,
                                 carbs: $scope.macros.carbs.value,
                                 fat: $scope.macros.fat.value,
@@ -31,7 +34,11 @@ define(['app',
         }
 
         function onError(result) {
-            console.log("error");
+            $scope.showLoading = false;
+            // user did something they are not allowed to do
+            if(result.status == 403) {
+                $scope.$emit('showAlert', [result.data, "danger"]);
+            }
         }
 
         function validateInput() {
@@ -102,13 +109,19 @@ define(['app',
 
         // when a restaurant is selected, clear box and add to list
         $('.typeahead').on('typeahead:selected', function(evt, item) {
-            if($scope.selected_restaurants.indexOf(item) == -1) {
+            if($scope.selected_restaurants.indexOf(item) == -1 && $scope.selected_restaurants.length != $scope.max_restaurants) {
                 $scope.$apply(function () {
                     $scope.already_selected = null;
                     $scope.selected_restaurants.push(item);
                     $scope.$emit('showAlert', ["Successfully added " + item.name, "success"]);
                 });
                 $('.typeahead').typeahead('val','');
+            }
+            else if($scope.selected_restaurants.length == $scope.max_restaurants) {
+                $scope.$apply(function() {
+                    $scope.$emit('showAlert', ["Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first", "danger"]);
+                    $scope.already_selected = null;
+                });
             }
             else {
                 $scope.$apply(function () {

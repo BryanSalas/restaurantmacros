@@ -15,16 +15,13 @@ define(['app'], function (app) {
                     data: reqData
                 }
 
-                return $http(req).then(onSuccess, onError);
+                return $http(req).then(onSuccess);
 
+                // let caller handle error case
                 function onSuccess(result) {
                     search_result = result.data;
                 }
 
-                function onError(result) {
-                    console.log(result);
-                    search_result = {};
-                }
             },
 
             get : function() {

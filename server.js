@@ -8,6 +8,7 @@ var methodOverride = require('method-override');
 var mongoose       = require('mongoose');
 var less           = require('less');
 var fs             = require('fs');
+var uglifyJS       = require('uglify-js');
 
 
 // configuration ===========================================

@@ -3,12 +3,6 @@ var ApiKey = require('./models/apiKey');
 var http = require('http');
 var request = require('request');
 
-//var api = new ApiKey({ _id: 'dba98fde', appKey: 'adbe45626226708ccb7d85830347aada' });
-//api.save(function (err, rest) {
-//  if (err) return console.error(err);
-//  console.log("saved");
-//});
-
     module.exports = function(app) {
 
         // set Nutritionix APP_ID and APP_KEY
@@ -25,6 +19,11 @@ var request = require('request');
         // server routes ===========================================================
 
         app.post('/api/results', function(req, res) {
+            // validate that only 5 restaurants are searched for
+            if (req.body.brands.length > 5) {
+                res.status(403).send('Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first');
+                return;
+            }
             var results = [];
             for(index in req.body.brands) {
                 searchRestaurant(req.body.brands[index]._id, req.body.brands[index].name, 0, {});
