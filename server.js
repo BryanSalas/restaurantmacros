@@ -8,10 +8,14 @@ var methodOverride = require('method-override');
 var mongoose       = require('mongoose');
 var less           = require('less');
 var fs             = require('fs');
-var uglifyJS       = require('uglify-js');
+var passport       = require('passport');
+var cookieParser   = require('cookie-parser');
+var session        = require('express-session');
 
 
 // configuration ===========================================
+
+require('./config/passport')(passport); // pass passport for configuration
 
 // compile less
 fs.readFile('./public/less/styles.less', function(err,styles) {
@@ -50,11 +54,24 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + '/public'));
 
+///////////////////////////////////////////////////////////
+// set up our express application
+//app.use(express.logger('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+
+// required for passport
+app.use(session({
+  secret: 'ilovescotchscotchyscotchscotch',
+  resave: false,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
 // routes ==================================================
-require('./app/routes')(app); // configure our routes
+require('./app/routes')(app, passport); // configure our routes
 
 // start app ===============================================
-// startup our app at http://localhost:8080
 app.listen(port);
 
 // shoutout to the user

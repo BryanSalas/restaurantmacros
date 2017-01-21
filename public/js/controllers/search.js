@@ -21,7 +21,7 @@ define(['app',
                                 carbs: $scope.macros.carbs.value,
                                 fat: $scope.macros.fat.value,
                                 protein: $scope.macros.protein.value,
-                                brands: $scope.selected_restaurants}).then(onSuccess, onError);
+                                restaurants: $scope.selected_restaurants}).then(onSuccess, onError);
                 $scope.showLoading = true;
             }
             else {

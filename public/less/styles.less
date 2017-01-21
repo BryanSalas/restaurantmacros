@@ -28,6 +28,23 @@ html {
   min-height: 100%;
 }
 
+//////////////////// BUTTONS ////////////////////////////
+.btn-primary {
+  &.gradient {
+    background: linear-gradient(#91dd70, #55ae2e);
+    border: 1px solid #5aad35;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
+
+    &:hover {
+      background: linear-gradient(#66b2cc,#33a6cc);
+    }
+
+    &:active {
+      background: linear-gradient(#267c99,#007299);
+    }
+  }
+}
+
 body {
   margin-bottom: 60px;
   font-family: oswaldregular;
