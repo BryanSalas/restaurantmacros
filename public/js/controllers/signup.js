@@ -4,7 +4,7 @@ define(['app'], function (app) {
       // This object will be filled by the form
       $scope.user = {};
 
-///////////////pick up here //////////////////////////////////////////////
+///////////////pick up here
 
       // Register the login() function
       $scope.login = function(){
