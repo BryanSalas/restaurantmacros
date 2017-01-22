@@ -48,8 +48,9 @@
                 </li> -->
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                  <li style="margin-right: 4px;" class="btn btn-primary gradient btn-lg">Login</li>
-                  <li class="btn btn-primary gradient btn-lg">Sign up</li>
+                  <li ng-if="!loggedInUser" ng-repeat="tab in nav_tabs_right_no_auth"><a href="{{tab.route}}">{{tab.label}}</a></li>
+                  <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth" ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
+                  <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
                 <!--&lt;!&ndash; <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li> &ndash;&gt;-->
               </ul>
             </div><!--/.nav-collapse -->

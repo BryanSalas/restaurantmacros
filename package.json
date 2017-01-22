@@ -13,6 +13,7 @@
         "passport-local": "latest",
         "bcrypt-nodejs": "latest",
         "cookie-parser": "latest",
-        "express-session": "latest"
+        "express-session": "latest",
+        "connect-mongo": "latest"
       }
 }

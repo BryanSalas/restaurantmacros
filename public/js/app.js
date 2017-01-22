@@ -6,50 +6,36 @@ define(['angularAMD',
         function (angularAMD) {
     var app = angular.module("app", ['ngRoute']);
     app.config(['$routeProvider', '$locationProvider', '$httpProvider',
-    function($routeProvider, $locationProvider, $httpProvider) {
+    function($routeProvider, $locationProvider, $httpProvider, $rootScope) {
 
         //================================================
         // Check if the user is connected
         //================================================
-        var checkLoggedin = function($q, $timeout, $http, $location, $rootScope){
+        var checkLoggedin = function($q, $http, $location, $rootScope){
           // Initialize a new promise
           var deferred = $q.defer();
 
           // Make an AJAX call to check if the user is logged in
           $http.get('/loggedin').success(function(user){
             // Authenticated
-            if (user !== '0')
-              /*$timeout(deferred.resolve, 0);*/
+            if (user !== "0") {
+              $rootScope.loggedInUser = user;
+              console.log(user);
               deferred.resolve();
+            }
 
             // Not Authenticated
             else {
               $rootScope.message = 'You need to log in.';
-              //$timeout(function(){deferred.reject();}, 0);
+              $rootScope.loggedInUser = null;
               deferred.reject();
+              console.log("not logged in");
               $location.url('/login');
             }
           });
 
           return deferred.promise;
         };
-
-        //================================================
-        // Add an interceptor for AJAX errors
-        //================================================
-        $httpProvider.interceptors.push(function($q, $location) {
-          return {
-            response: function(response) {
-              // do something on success
-              return response;
-            },
-            responseError: function(response) {
-              if (response.status === 401)
-                $location.url('/login');
-              return $q.reject(response);
-            }
-          };
-        });
 
         $routeProvider
 
@@ -71,44 +57,76 @@ define(['angularAMD',
            controllerUrl: 'controllers/results'
         }))
 
-        .when("/login", angularAMD.route({
-           templateUrl: 'views/login.html',
-           controller: 'rmLogin',
-           controllerUrl: 'controllers/login'
-        }))
-
         .when("/signup", angularAMD.route({
            templateUrl: 'views/signup.html',
            controller: 'rmSignup',
            controllerUrl: 'controllers/signup'
         }))
 
+        .when("/login", angularAMD.route({
+           templateUrl: 'views/login.html',
+           controller: 'rmLogin',
+           controllerUrl: 'controllers/login'
+        }))
+
+        .when("/profile", angularAMD.route({
+           templateUrl: 'views/profile.html',
+           controller: 'rmProfile',
+           controllerUrl: 'controllers/profile',
+           resolve: { loggedin: checkLoggedin }
+        }))
+
+        .otherwise("/");
+
         $locationProvider.html5Mode(true);
     }]);
 
-    app.controller('mainCtrl', function($scope, $rootScope, $location, $timeout) {
+    app.controller('mainCtrl', function($scope, $rootScope, $location, $timeout, $http, $window) {
+
+        // check if user logged in
+        $http.get('/loggedin').success(function(user){
+            // Authenticated
+            if (user !== "0") {
+              $rootScope.loggedInUser = user;
+            }
+
+            // Not Authenticated
+            else {
+              $rootScope.loggedInUser = null;
+            }
+        });
+
         $scope.hide_alert = true;
 	    $scope.nav_tabs = [
 	        {label:'Home', route:'/'},
 	        {label:'Search', route:'/search'}
 	    ];
 
-	    $scope.nav_tabs_right = [
-	        {label:'Log in', route:'/login'}
+	    $scope.nav_tabs_right_no_auth = [
+	        {label:'Log in', route:'/login'},
+	        {label:'Signup', route:'/signup'}
+	    ]
+
+	    $scope.nav_tabs_right_auth = [
+	        {label:'Profile', route:'/profile'}
 	    ]
 
 	    $scope.cur_tab = '/';
+
+	    $scope.logout = function() {
+	        $http.post("/logout").then(function(result) {
+	            // reload page
+	            $window.location.reload();
+	        }, function(result) {
+	            // error logging out
+	            console.log(result);
+	        });
+	    }
 
 	    $rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
             $scope.cur_tab = $location.path();
             $scope.hideAlert();
         });
-
-        // Logout function is available in any pages
-        $rootScope.logout = function(){
-            $rootScope.message = 'Logged out.';
-            $http.post('/logout');
-        };
 
         $scope.$on('showAlert', function(event, args) {
             $timeout.cancel($scope.hide_alert_promise);

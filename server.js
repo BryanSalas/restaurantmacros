@@ -11,6 +11,7 @@ var fs             = require('fs');
 var passport       = require('passport');
 var cookieParser   = require('cookie-parser');
 var session        = require('express-session');
+var MongoStore     = require('connect-mongo')(session);
 
 
 // configuration ===========================================
@@ -62,9 +63,12 @@ app.use(cookieParser()); // read cookies (needed for auth)
 // required for passport
 app.use(session({
   secret: 'ilovescotchscotchyscotchscotch',
+  maxAge: new Date(Date.now() + 3600000),
+  store: new MongoStore({mongooseConnection:mongoose.connection}),
   resave: false,
   saveUninitialized: true
 }));
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
