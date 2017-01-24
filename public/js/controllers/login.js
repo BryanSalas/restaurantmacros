@@ -5,11 +5,14 @@ define(['app'], function (app) {
       if($rootScope.loggedInUser) {
         $location.url("/");
       }
+
+      ////////////// PICK UP HERE
+
+      console.log($location.search());
+
       // This object will be filled by the form
       $scope.user = {};
       $rootScope.showNav = false;
-
-      console.log($scope);
 
       // Register the login() function
       $scope.login = function(){

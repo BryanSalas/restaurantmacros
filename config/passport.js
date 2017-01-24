@@ -20,7 +20,7 @@ module.exports = function(passport) {
         if (!err){
             facebookClientID = docs[0].secrets.clientID;
             facebookClientSecret = docs[0].secrets.clientSecret;
-            facebookCallbackURL = "http://localhost:8080/auth/facebook/callback";
+            facebookCallbackURL = "http://localhost:3000/auth/facebook/callback";
             setPassportConfig();
         }
         else {
@@ -68,11 +68,11 @@ module.exports = function(passport) {
 
                 // if no user is found, return the message
                 if (!user)
-                    return done(null, false, { message: 'Incorrect username.' }); // req.flash is the way to set flashdata using connect-flash
+                    return done(null, false, { message: 'Incorrect username.' });
 
                 // if the user is found but the password is wrong
                 if (!user.validPassword(password))
-                    return done(null, false, { message: 'Incorrect password.' }); // create the loginMessage and save it to session as flashdata
+                    return done(null, false, { message: 'Incorrect password.' });
 
                 // all is well, return successful user
                 return done(null, user, { message: 'Success!' });
@@ -102,61 +102,45 @@ module.exports = function(passport) {
                 // we are checking to see if the user trying to login already exists
                 User.findOne({ 'local.email' :  email }, function(err, user) {
                     // if there are any errors, return the error
-                    if (err)
+                    if (err) {
                         return done(err);
-
+                    }
                     // check to see if theres already a user with that email
                     if (user) {
                         return done(null, false, { message: 'Email taken.' });
-                    } else {
+                    }
+                    else {
+                        // check to see if theres any facebook users with that email
+                        User.findOne({ 'facebook.email' :  email }, function(err, user) {
+                            // if there are any errors, return the error
+                            if (err) {
+                                return done(err);
+                            }
+                            // check to see if theres already a user with that email
+                            if (user) {
+                                return done(null, false, { message: 'Email taken.' });
+                            }
+                            else {
+                                // if there is no user with that email
+                                // create the user
+                                var newUser            = new User();
 
-                        // if there is no user with that email
-                        // create the user
-                        var newUser            = new User();
+                                // set the user's local credentials
+                                newUser.local.email    = email;
+                                newUser.local.password = newUser.hashPassword(password);
 
-                        // set the user's local credentials
-                        newUser.local.email    = email;
-                        newUser.local.password = newUser.hashPassword(password);
-
-                        // save the user
-                        newUser.save(function(err) {
-                            if (err)
-                                throw err;
-                            return done(null, newUser);
+                                // save the user
+                                newUser.save(function(err) {
+                                    if (err)
+                                        throw err;
+                                    return done(null, newUser);
+                                });
+                            }
                         });
                     }
                 });
             });
         }));
-
-        /*passport.use('local-login', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField : 'email',
-            passwordField : 'password',
-            passReqToCallback : true // allows us to pass back the entire request to the callback
-        },
-        function(req, email, password, done) { // callback with email and password from our form
-
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
-            User.findOne({ 'local.email' :  email }, function(err, user) {
-                // if there are any errors, return the error before anything else
-                if (err)
-                    return done(err);
-
-                // if no user is found, return the message
-                if (!user)
-                    return done(null, false, req.flash('loginMessage', 'No user found.'));
-
-                // if the user is found but the password is wrong
-                if (!user.validPassword(password))
-                    return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
-
-                // all is well, return successful user
-                return done(null, user);
-            });
-
-        }));*/
 
         // =========================================================================
         // FACEBOOK ================================================================
@@ -166,7 +150,8 @@ module.exports = function(passport) {
 
             clientID        : facebookClientID,
             clientSecret    : facebookClientSecret,
-            callbackURL     : facebookCallbackURL
+            callbackURL     : facebookCallbackURL,
+            profileFields   : ['id', 'displayName', 'email', 'name']
 
         },
 
@@ -181,32 +166,47 @@ module.exports = function(passport) {
 
                     // if there is an error, stop everything and return that
                     // ie an error connecting to the database
-                    if (err)
+                    if (err) {
                         return done(err);
+                    }
 
                     // if the user is found, then log them in
                     if (user) {
                         return done(null, user); // user found, return that user
-                    } else {
-                        // if there is no user found with that facebook id, create them
-                        var newUser = new User();
+                    }
+                    else {
+                        // check if there is a local email with this users facebook email
+                        User.findOne({ 'local.email' :  profile.emails[0].value }, function(err, user) {
+                            // if there are any errors, return the error
+                            if (err) {
+                                return done(err);
+                            }
+                            // check to see if theres already a user with that email
+                            if (user) {
+                                console.log("email taken");
+                                return done(null, false, { message: 'Email taken.' });
+                            }
+                            else {
+                                // if there is no user found with that facebook id or email, create them
+                                var newUser = new User();
 
-                        // set all of the facebook information in our user model
-                        newUser.facebook.id    = profile.id; // set the users facebook id
-                        newUser.facebook.token = token; // we will save the token that facebook provides to the user
-                        newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                        newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+                                // set all of the facebook information in our user model
+                                newUser.facebook.id    = profile.id;
+                                newUser.facebook.token = token;
+                                newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
+                                newUser.facebook.email = profile.emails[0].value;
 
-                        // save our user to the database
-                        newUser.save(function(err) {
-                            if (err)
-                                throw err;
+                                // save our user to the database
+                                newUser.save(function(err) {
+                                    if (err)
+                                        throw err;
 
-                            // if successful, return the new user
-                            return done(null, newUser);
+                                    // if successful, return the new user
+                                    return done(null, newUser);
+                                });
+                            }
                         });
                     }
-
                 });
             });
 

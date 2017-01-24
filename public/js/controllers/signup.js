@@ -4,23 +4,22 @@ define(['app'], function (app) {
       // This object will be filled by the form
       $scope.user = {};
 
-///////////////pick up here
-
       // Register the login() function
-      $scope.login = function(){
+      $scope.signup = function(){
+        console.log("signingup");
         $http.post('/signup', {
-          username: $scope.user.username,
+          email: $scope.user.email,
           password: $scope.user.password,
         })
         .success(function(user){
           // No error: authentication OK
           $rootScope.message = 'Authentication successful!';
-          $location.url('/admin');
+          $location.url('/profile');
         })
         .error(function(){
           // Error: authentication failed
           $rootScope.message = 'Authentication failed.';
-          $location.url('/login');
+          $location.url('/signup');
         });
       };
     }]);
