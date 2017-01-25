@@ -9,7 +9,9 @@ require.config({
         'typeahead': '../libs/typeahead/dist/typeahead.jquery',
         'bloodhound': '../libs/typeahead/dist/bloodhound'
     },
-    shim: { 'angularAMD': ['angular'], 'angular-route': ['angular'], 'bootstrap': ['jquery'],
+    shim: { 'angularAMD': ['angular'],
+            'angular-route': ['angular'],
+            'bootstrap': ['jquery'],
             'typeahead':{
                 'deps': ['jquery'],
                 'init': function ($) {
@@ -19,7 +21,8 @@ require.config({
             'bloodhound': {
                 'deps': ['jquery'],
                 'exports': 'Bloodhound'
-            }
+            },
+            'ui-bootstrap': ['bootstrap']
         },
     deps: ['app']
 });

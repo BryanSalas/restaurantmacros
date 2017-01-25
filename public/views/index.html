@@ -19,43 +19,61 @@
     <body ng-cloak ng-controller="mainCtrl">
         <!-- Fixed navbar -->
         <nav class="navbar navbar-default navbar-fixed-top">
-          <div class="container">
-              <a class="pull-left" href="/"><img ng-src="img/logo.png" alt="Loading..." /></a>
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
+            <div class="container">
+                <a class="pull-left" href="/"><img ng-src="img/logo.png" alt="Loading..." /></a>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-repeat="tab in nav_tabs" ng-class="{'active': tab.route == cur_tab}">
+                            <a href="{{tab.route}}">{{tab.label}}</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginModal"
+                          ng-repeat="tab in nav_tabs_right_no_auth"><a href="">{{tab.label}}</a></li>
+                        <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth"
+                            ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
+                        <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
+                    </ul>
+                </div>
             </div>
-            <div id="navbar" class="navbar-collapse collapse">
-              <ul class="nav navbar-nav">
-                  <li ng-repeat="tab in nav_tabs" ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
-                <!-- <li id="restaurantsTab"><a href="/restaurants">Restaurants</a></li>
-                <li id="foodTab"><a href="/food">Food</a></li> -->
-                <!-- <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
-                  </ul>
-                </li> -->
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                  <li ng-if="!loggedInUser" ng-repeat="tab in nav_tabs_right_no_auth"><a href="{{tab.route}}">{{tab.label}}</a></li>
-                  <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth" ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
-                  <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
-                <!--&lt;!&ndash; <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li> &ndash;&gt;-->
-              </ul>
-            </div><!--/.nav-collapse -->
-          </div>
         </nav>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" style="text-align: center;">Login to Restaurant Macros</h4>
+                </div>
+                <div class="modal-body">
+                    <form ng-submit="login()" style="text-align: center;">
+                        <img ng-src="img/logo_plate.png" style="width: 34px;" />
+                    <p>
+                        <input type="text" placeholder="Username" ng-model="user.username" />
+                    </p>
+                    <p>
+                        <input type="password" placeholder="Password" ng-model="user.password" /><br/>
+                    </p>
+                    <p>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </p>
+                </form>
+                <form action="/auth/facebook" method="post">
+                    <div>
+                        <button type="submit" class="btn btn-primary"><span class="fa fa-facebook"></span> Login with Facebook</button>
+                    </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- alerts -->
         <!--<div style="text-align: center;">
             <div id="alert-box" ng-class="{'rm-hidden': hide_alert}" class="alert alert-dismissible" role="alert">
@@ -65,7 +83,7 @@
                 {{alert_text}}
             </div>
         </div> -->
-        <div style="margin-top: 95px;" ng-view></div>
+        <div style="margin-top: 110px;" ng-view></div>
         <!--<footer class="footer">
               <div class="container">
                   <p>Restaurant Macros was developed by Bryan Salas</p>

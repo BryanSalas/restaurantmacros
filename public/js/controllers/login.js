@@ -2,34 +2,28 @@ define(['app'], function (app) {
     app.controller('rmLogin', ['$scope', '$rootScope', '$http', '$location',
     function($scope, $rootScope, $http, $location) {
 
-      if($rootScope.loggedInUser) {
-        $location.url("/");
-      }
+        // if user is logged in, redirect to profile page
+        if($rootScope.loggedInUser) {
+            $location.url("/profile");
+        }
 
-      ////////////// PICK UP HERE
+        if($location.search().email_in_use) {
+            console.log("email in use");
+        }
 
-      console.log($location.search());
+        $scope.user = {};
 
-      // This object will be filled by the form
-      $scope.user = {};
-      $rootScope.showNav = false;
-
-      // Register the login() function
-      $scope.login = function(){
-        $http.post('/login', {
-          email: $scope.user.username,
-          password: $scope.user.password,
-        })
-        .success(function(user){
-          // No error: authentication OK
-          $rootScope.message = 'Authentication successful!';
-          $location.url('/profile');
-        })
-        .error(function(){
-          // Error: authentication failed
-          $rootScope.message = 'Authentication failed.';
-          $location.url('/login');
-        });
-      };
+        $scope.login = function(){
+            $http.post('/login', {
+              email: $scope.user.username,
+              password: $scope.user.password,
+            })
+            .success(function(user){
+              $location.url('/profile');
+            })
+            .error(function(){
+              $location.url('/login');
+            });
+        };
     }]);
 });
