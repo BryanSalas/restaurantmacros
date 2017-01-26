@@ -28,8 +28,12 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginModal"
-                          ng-repeat="tab in nav_tabs_right_no_auth"><a href="">{{tab.label}}</a></li>
+                        <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
+                            <a href ng-click="showLoginModal();">Login</a>
+                        </li>
+                        <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
+                            <a href ng-click="showSignupModal();">Signup</a>
+                        </li>
                         <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth"
                             ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
                         <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
@@ -39,39 +43,67 @@
         </nav>
 
         <!-- Login Modal -->
-        <div id="loginModal" class="modal fade" role="dialog">
+        <div id="loginSignupModal" class="modal fade" role="dialog" style="top: 15%; outline: none;">
             <div class="modal-dialog">
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title" style="text-align: center;">Login to Restaurant Macros</h4>
-                </div>
-                <div class="modal-body">
-                    <form ng-submit="login()" style="text-align: center;">
-                        <img ng-src="img/logo_plate.png" style="width: 34px;" />
-                    <p>
-                        <input type="text" placeholder="Username" ng-model="user.username" />
-                    </p>
-                    <p>
-                        <input type="password" placeholder="Password" ng-model="user.password" /><br/>
-                    </p>
-                    <p>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </p>
-                </form>
-                <form action="/auth/facebook" method="post">
-                    <div>
-                        <button type="submit" class="btn btn-primary"><span class="fa fa-facebook"></span> Login with Facebook</button>
+                <!-- Login Modal content-->
+                <div ng-if="showModal == 'login'" class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="text-align: center;">Login to Restaurant Macros</h4>
                     </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
+                    <div class="modal-body" style="text-align: center; width: 50%; margin: 0 auto;">
+                        <form ng-submit="login()" style="margin: 0 auto;">
+                            <img ng-src="img/logo_plate.png" style="width: 34px; margin-bottom: 5px;" />
+                            <input type="email" class="form-control" style="margin-bottom: 5px;" placeholder="E-mail"
+                                   ng-model="user.username" name="email"/>
+                            <input type="password" class="form-control" style="width: 100%;" placeholder="Password"
+                                   ng-model="user.password" /><br/>
+                            <button type="submit" class="btn btn-success" style="width: 100%; margin-bottom: 5px;">Login</button>
+                        </form>
+                        <form action="/auth/facebook" method="post">
+                            <div>
+                                <button type="submit" style="width: 100%;" class="btn btn-primary">
+                                    <span class="fa fa-facebook"></span> Login with Facebook</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <div>Don't have an account? <a href ng-click="showSignupModal()">Sign up</a></div>
+                    </div>
+                </div>
+
+                <!-- Signup Modal content-->
+                <div ng-if="showModal == 'signup'" class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="text-align: center;">Create your Restaurant Macros account</h4>
+                    </div>
+                    <div class="modal-body" style="text-align: center; width: 50%; margin: 0 auto;">
+                        <form ng-submit="login()" style="margin: 0 auto;">
+                            <img ng-src="img/logo_plate.png" style="width: 34px; margin-bottom: 5px;" />
+                            <input type="text" class="form-control" style="margin-bottom: 5px;" placeholder="Full Name"
+                                   ng-model="user.name" autocomplete="name"/>
+                            <input type="email" class="form-control" style="width: 100%; margin-bottom: 5px;" placeholder="E-mail address"
+                                   ng-model="user.email" name="email" autocomplete="email"/>
+                            <input type="password" class="form-control" style="width: 100%;" placeholder="Password"
+                                   ng-model="user.password" name="password" /><br/>
+                            <button type="submit" class="btn btn-success" style="width: 100%; margin-bottom: 5px;">
+                                Sign up
+                            </button>
+                        </form>
+                        <form action="/auth/facebook" method="post">
+                            <div>
+                                <button type="submit" style="width: 100%;" class="btn btn-primary">
+                                    <span class="fa fa-facebook"></span> Sign up with Facebook</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="text-align: center;">
+                        <div>Already have an account? <a href ng-click="showLoginModal();">Login</a></div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
 
         <!-- alerts -->

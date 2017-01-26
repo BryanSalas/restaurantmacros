@@ -57,18 +57,6 @@ define(['angularAMD',
            controllerUrl: 'controllers/results'
         }))
 
-        .when("/signup", angularAMD.route({
-           templateUrl: 'views/signup.html',
-           controller: 'rmSignup',
-           controllerUrl: 'controllers/signup'
-        }))
-
-        .when("/login", angularAMD.route({
-           templateUrl: 'views/login.html',
-           controller: 'rmLogin',
-           controllerUrl: 'controllers/login'
-        }))
-
         .when("/profile", angularAMD.route({
            templateUrl: 'views/profile.html',
            controller: 'rmProfile',
@@ -96,6 +84,55 @@ define(['angularAMD',
             }
         });
 
+        $scope.user = {};
+
+        $scope.showLoginModal = function() {
+            $scope.showModal = "login";
+        }
+
+        $scope.showSignupModal = function() {
+            $scope.showModal = "signup";
+        }
+
+        $scope.signup = function(){
+            $http.post('/signup', {
+              email: $scope.user.email,
+              password: $scope.user.password,
+            })
+            .success(function(user){
+              // No error: authentication OK
+              $rootScope.message = 'Authentication successful!';
+              $location.url('/profile');
+            })
+            .error(function(){
+              // Error: authentication failed
+              $rootScope.message = 'Authentication failed.';
+            });
+        };
+
+        $scope.login = function(){
+            $http.post('/login', {
+              email: $scope.user.username,
+              password: $scope.user.password,
+            })
+            .success(function(user){
+              $location.url('/profile');
+            })
+            .error(function(){
+              console.log("error logging in");
+            });
+        };
+
+        $scope.logout = function() {
+	        $http.post("/logout").then(function(result) {
+	            // reload page
+	            $window.location.reload();
+	        }, function(result) {
+	            // error logging out
+	            console.log(result);
+	        });
+	    }
+
         $scope.hide_alert = true;
 	    $scope.nav_tabs = [
 	        {label:'Home', route:'/'},
@@ -112,16 +149,6 @@ define(['angularAMD',
 	    ]
 
 	    $scope.cur_tab = '/';
-
-	    $scope.logout = function() {
-	        $http.post("/logout").then(function(result) {
-	            // reload page
-	            $window.location.reload();
-	        }, function(result) {
-	            // error logging out
-	            console.log(result);
-	        });
-	    }
 
 	    $rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
             $scope.cur_tab = $location.path();
