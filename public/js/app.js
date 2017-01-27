@@ -20,7 +20,6 @@ define(['angularAMD',
             // Authenticated
             if (user !== "0") {
               $rootScope.loggedInUser = user;
-              console.log(user);
               deferred.resolve();
             }
 
@@ -29,7 +28,6 @@ define(['angularAMD',
               $rootScope.message = 'You need to log in.';
               $rootScope.loggedInUser = null;
               deferred.reject();
-              console.log("not logged in");
               $location.url('/login');
             }
           });
@@ -85,6 +83,15 @@ define(['angularAMD',
         });
 
         $scope.user = {};
+        $scope.newUser = {
+                            validation_errors: {
+                                name: "Please enter your full name",
+                                email: "Please enter a valid e-mail address",
+                                password: "Please enter a password",
+                                confirm_password: "Passwords do not match"
+                            }
+                         }
+
 
         $scope.showLoginModal = function() {
             $scope.showModal = "login";
@@ -96,30 +103,35 @@ define(['angularAMD',
 
         $scope.signup = function(){
             $http.post('/signup', {
-              email: $scope.user.email,
-              password: $scope.user.password,
+                name: $scope.newUser.name,
+                email: $scope.newUser.email,
+                password: $scope.newUser.password,
+                confirm_password: $scope.newUser.confirm_password
             })
             .success(function(user){
-              // No error: authentication OK
-              $rootScope.message = 'Authentication successful!';
+              $('#loginSignupModal').modal('hide');
               $location.url('/profile');
             })
-            .error(function(){
-              // Error: authentication failed
-              $rootScope.message = 'Authentication failed.';
+            .error(function(result){
+                if(result.errors != null) {
+                    $scope.newUser.server_errors = result.errors;
+                }
             });
         };
 
         $scope.login = function(){
             $http.post('/login', {
-              email: $scope.user.username,
+              email: $scope.user.email,
               password: $scope.user.password,
             })
             .success(function(user){
-              $location.url('/profile');
+                $('#loginSignupModal').modal('hide');
+                $location.url('/profile');
             })
-            .error(function(){
-              console.log("error logging in");
+            .error(function(result){
+                if(result.errors != null) {
+                    $scope.user.server_errors = result.errors;
+                }
             });
         };
 

@@ -47,13 +47,48 @@ module.exports = function(app, passport) {
 
     // process the signup form
     app.post('/signup', function(req, res, next) {
+
+        var json_resp = {
+                            errors: {
+                                name: null,
+                                email: null,
+                                password: null
+                            }
+                        }
+
+        // check if name was given
+        if(!req.body.name) {
+            json_resp.errors.name = "Please enter your full name";
+        }
+
+        // TODO: check if valid email
+        if(!req.body.email) {
+            json_resp.errors.email = "Please enter a valid e-mail address";
+        }
+
+        // check if password given
+        if(!req.body.password) {
+            json_resp.errors.password = "Please enter a password";
+        }
+
+        // check if passwords match
+        if(req.body.password != req.body.confirm_password) {
+            res.send(400, json_resp);
+            return;
+        }
+
+        if(json_resp.errors.name || json_resp.errors.email || json_resp.errors.password) {
+            res.send(400, json_resp);
+            return;
+        }
+
         passport.authenticate("local-signup", function (err, user, info) {
             if (err) {
                 return next(err);
             }
 
             if (!user) {
-                res.send(401, info);
+                res.send(400, info);
                 return;
             }
             req.logIn(user, function (err) {
@@ -80,14 +115,14 @@ module.exports = function(app, passport) {
             }
 
             if (!user) {
-                res.redirect('/login?email_in_use=true');
+                res.redirect("/");
                 return;
             }
             req.logIn(user, function (err) {
                 if (err) {
                     return next(err);
                 }
-                res.redirect('/profile');
+                res.redirect("/profile");
             });
         })(req, res, next);
     });

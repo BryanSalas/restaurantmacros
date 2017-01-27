@@ -45,6 +45,14 @@ html {
   }
 }
 
+///////////////////// INPUT ////////////////////////////
+.form-control {
+    &.warning {
+        border-color: #c70000;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px #c70000;
+    }
+}
+
 body {
   margin-bottom: 60px;
   font-family: oswaldregular;
@@ -178,11 +186,6 @@ body {
         display: inline-block;
         height: 100%;
         font-size: 100%;
-
-        &.warning {
-            border-color: #c70000;
-            box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px #c70000;
-        }
     }
 
     .twitter-typeahead {

@@ -53,12 +53,21 @@
                         <h4 class="modal-title" style="text-align: center;">Login to Restaurant Macros</h4>
                     </div>
                     <div class="modal-body" style="text-align: center; width: 50%; margin: 0 auto;">
-                        <form ng-submit="login()" style="margin: 0 auto;">
+                        <!-- any errors from server -->
+                        <p ng-repeat="err in user.server_errors">
+                            <span style="color: #c70000" ng-if="err">{{err}}</span>
+                        </p>
+                        <form ng-submit="login()" name="loginForm" style="margin: 0 auto;">
                             <img ng-src="img/logo_plate.png" style="width: 34px; margin-bottom: 5px;" />
+
+                            <!-- Email -->
                             <input type="email" class="form-control" style="margin-bottom: 5px;" placeholder="E-mail"
-                                   ng-model="user.username" name="email"/>
+                                   ng-model="user.email" name="email" autocomplete="email" required/>
+
+                            <!-- Password -->
                             <input type="password" class="form-control" style="width: 100%;" placeholder="Password"
-                                   ng-model="user.password" /><br/>
+                                   ng-model="user.password" required/><br/>
+
                             <button type="submit" class="btn btn-success" style="width: 100%; margin-bottom: 5px;">Login</button>
                         </form>
                         <form action="/auth/facebook" method="post">
@@ -80,14 +89,49 @@
                         <h4 class="modal-title" style="text-align: center;">Create your Restaurant Macros account</h4>
                     </div>
                     <div class="modal-body" style="text-align: center; width: 50%; margin: 0 auto;">
-                        <form ng-submit="login()" style="margin: 0 auto;">
+                        <!-- any errors from server -->
+                        <p ng-repeat="err in newUser.server_errors">
+                            <span style="color: #c70000" ng-if="err">{{err}}</span>
+                        </p>
+                        <form ng-submit="signup()" name="signupForm" style="margin: 0 auto;">
                             <img ng-src="img/logo_plate.png" style="width: 34px; margin-bottom: 5px;" />
-                            <input type="text" class="form-control" style="margin-bottom: 5px;" placeholder="Full Name"
-                                   ng-model="user.name" autocomplete="name"/>
-                            <input type="email" class="form-control" style="width: 100%; margin-bottom: 5px;" placeholder="E-mail address"
-                                   ng-model="user.email" name="email" autocomplete="email"/>
-                            <input type="password" class="form-control" style="width: 100%;" placeholder="Password"
-                                   ng-model="user.password" name="password" /><br/>
+
+                            <!-- Name -->
+                            <input type="text" class="form-control"
+                                   ng-class="{'warning': signupForm.name.$invalid && validateSignupName}"
+                                   style="margin-bottom: 5px;" placeholder="Full Name*"
+                                   ng-model="newUser.name" name="name" autocomplete="name"
+                                   ng-blur="validateSignupName = true"
+                                   ng-focus="validateSignupName = false" required/>
+                            <p ng-show="signupForm.name.$invalid && validateSignupName"
+                               style="color: #c70000"
+                               class="help-block">{{ newUser.validation_errors.name }}</p>
+
+                            <!-- Email -->
+                            <input type="email" class="form-control"
+                                   ng-class="{'warning': signupForm.email.$invalid && validateSignupEmail}"
+                                   style="width: 100%; margin-bottom: 5px;" placeholder="E-mail address*"
+                                   ng-model="newUser.email" name="email"
+                                   autocomplete="email"
+                                   ng-blur="validateSignupEmail = true"
+                                   ng-focus="validateSignupEmail = false" required/>
+                            <p ng-show="signupForm.email.$invalid && validateSignupEmail" style="color: #c70000"
+                               class="help-block">{{ newUser.validation_errors.email }}</p>
+
+                            <!-- Password -->
+                            <input type="password" class="form-control"
+                                   ng-class="{'warning': newUser.password_missing}"
+                                   style="width: 100%; margin-bottom: 5px;" placeholder="Password*"
+                                   ng-model="newUser.password" name="password" required/>
+                            <p ng-show="newUser.password_missing" style="color: #c70000"
+                               class="help-block">{{ newUser.validation_errors.password }}</p>
+
+                            <!-- Confirm Password -->
+                            <input type="password" class="form-control" style="width: 100%;" placeholder="Confirm Password*"
+                                   ng-model="newUser.confirm_password" name="password" autocomplete="off" required/>
+                            <p ng-show="newUser.password != newUser.confirm_password" style="color: #c70000"
+                               class="help-block">{{ newUser.validation_errors.confirm_password }}</p><br/>
+
                             <button type="submit" class="btn btn-success" style="width: 100%; margin-bottom: 5px;">
                                 Sign up
                             </button>
