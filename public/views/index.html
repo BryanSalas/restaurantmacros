@@ -14,7 +14,16 @@
         <!-- custom styles -->
 
         <!-- JS -->
-       <script data-main="js/main.js" src="libs/requirejs/require.js"></script>
+        <script data-main="js/main.js" src="libs/requirejs/require.js"></script>
+
+        <!-- fix FB callback #_=_ in url -->
+        <script type="text/javascript">
+            if (window.location.hash == '#_=_'){
+                history.replaceState
+                    ? history.replaceState(null, null, window.location.href.split('#')[0])
+                    : window.location.hash = '';
+            }
+        </script>
     </head>
     <body ng-cloak ng-controller="mainCtrl">
         <!-- Fixed navbar -->

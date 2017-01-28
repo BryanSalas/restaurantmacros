@@ -52,11 +52,11 @@ module.exports = function(passport, acl) {
             User.findOne({ 'local.email' :  email }, function(err, user) {
 
                 var json_resp = {
-                                    errors: {
-                                        email: null,
-                                        password: null
-                                    }
-                                };
+                    errors: {
+                        email: null,
+                        password: null
+                    }
+                };
 
                 // if there are any errors, return the error before anything else
                 if (err)

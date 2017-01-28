@@ -25,10 +25,9 @@ define(['angularAMD',
 
             // Not Authenticated
             else {
-              $rootScope.message = 'You need to log in.';
               $rootScope.loggedInUser = null;
               deferred.reject();
-              $location.url('/login');
+              $location.url("/login");
             }
           });
 
