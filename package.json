@@ -14,6 +14,7 @@
         "bcrypt-nodejs": "latest",
         "cookie-parser": "latest",
         "express-session": "latest",
-        "connect-mongo": "latest"
+        "connect-mongo": "latest",
+        "acl": "latest"
       }
 }

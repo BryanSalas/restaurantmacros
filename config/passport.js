@@ -1,19 +1,14 @@
-// load all the things we need
-var LocalStrategy   = require('passport-local').Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+var LocalStrategy    = require("passport-local").Strategy;
+var FacebookStrategy = require("passport-facebook").Strategy;
 
-// load up the user model
-var User = require('../app/models/user');
-
-// load the auth variables
+var User   = require("../app/models/user");
 var Secret = require("../app/models/secret");
 
 var facebookClientID;
 var facebookClientSecret;
 var facebookCallbackURL;
 
-// expose this function to our app using module.exports
-module.exports = function(passport) {
+module.exports = function(passport, acl) {
 
     // set facebook auth info
     Secret.find({type: "facebook"}, function(err, docs) {
@@ -29,12 +24,8 @@ module.exports = function(passport) {
         }
     });
 
-	// =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
     function setPassportConfig() {
+
         // used to serialize the user for the session
         passport.serializeUser(function(user, done) {
             done(null, user);
@@ -48,14 +39,11 @@ module.exports = function(passport) {
         // =========================================================================
         // LOCAL LOGIN =============================================================
         // =========================================================================
-        // we are using named strategies since we have one for login and one for signup
-        // by default, if there was no name, it would just be called 'local'
 
-        passport.use('local-login', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField : 'email',
-            passwordField : 'password',
-            passReqToCallback : true // allows us to pass back the entire request to the callback
+        passport.use("local-login", new LocalStrategy({
+            usernameField : "email",
+            passwordField : "password",
+            passReqToCallback : true
         },
           function(req, email, password, done) {
 
@@ -95,12 +83,10 @@ module.exports = function(passport) {
         // =========================================================================
         // LOCAL SIGNUP ============================================================
         // =========================================================================
-        // we are using named strategies since we have one for login and one for signup
-        // by default, if there was no name, it would just be called 'local'
 
-        passport.use('local-signup', new LocalStrategy({
-            usernameField : 'email',
-            passwordField : 'password',
+        passport.use("local-signup", new LocalStrategy({
+            usernameField : "email",
+            passwordField : "password",
             passReqToCallback : true
         },
         function(req, email, password, done) {
@@ -143,8 +129,7 @@ module.exports = function(passport) {
                                 return done(null, false, json_resp);
                             }
                             else {
-                                // if there is no user with that email
-                                // create the user
+                                // create new user if there is no user with that email
                                 var newUser            = new User();
 
                                 // set the user's local credentials
@@ -152,10 +137,15 @@ module.exports = function(passport) {
                                 newUser.local.password = newUser.hashPassword(password);
                                 newUser.local.name     = req.body.name;
 
-                                // save the user
+                                // save new user
                                 newUser.save(function(err) {
-                                    if (err)
+                                    if (err) {
                                         throw err;
+                                    }
+
+                                    // set user role
+                                    acl.addUserRoles(newUser._id, "user");
+
                                     return done(null, newUser);
                                 });
                             }
@@ -174,7 +164,7 @@ module.exports = function(passport) {
             clientID        : facebookClientID,
             clientSecret    : facebookClientSecret,
             callbackURL     : facebookCallbackURL,
-            profileFields   : ['id', 'displayName', 'email', 'name']
+            profileFields   : ["id", "displayName", "email", "name"]
 
         },
 
@@ -185,7 +175,7 @@ module.exports = function(passport) {
             process.nextTick(function() {
 
                 // find the user in the database based on their facebook id
-                User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
+                User.findOne({ "facebook.id" : profile.id }, function(err, user) {
 
                     // if there is an error, stop everything and return that
                     // ie an error connecting to the database
@@ -204,13 +194,17 @@ module.exports = function(passport) {
                         // set all of the facebook information in our user model
                         newUser.facebook.id    = profile.id;
                         newUser.facebook.token = token;
-                        newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
+                        newUser.facebook.name  = profile.name.givenName + " " + profile.name.familyName;
                         newUser.facebook.email = profile.emails[0].value;
 
-                        // save our user to the database
+                        // save new user
                         newUser.save(function(err) {
-                            if (err)
+                            if (err) {
                                 throw err;
+                            }
+
+                            // set user role
+                            acl.addUserRoles(newUser._id.toString(), "user");
 
                             // if successful, return the new user
                             return done(null, newUser);

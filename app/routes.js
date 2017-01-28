@@ -1,17 +1,63 @@
-var Restaurant = require('./models/restaurant');
-var Item = require('./models/item');
-var http = require('http');
-var request = require('request');
+var http     = require('http');
+var request  = require('request');
 var ObjectId = require('mongoose').Types.ObjectId;
 
-module.exports = function(app, passport) {
+var Restaurant = require('./models/restaurant');
+var Item       = require('./models/item');
+
+// Authentication middleware for passport
+function authenticated(request, response, next) {
+
+    if ( request.isAuthenticated() ) {
+        return next();
+    }
+
+    response.send(401, "User not authenticated");
+}
+
+// This gets the ID from currently logged in user
+function get_user_id(request, response) {
+    return request.user._id;
+}
+
+module.exports = function(app, passport, acl) {
+
+    // =====================================
+    // ACL =================================
+    // =====================================
+
+    // admin => devs
+    // member => TBD
+    // user => regular user
+
+    acl.allow([
+        {
+            roles: "admin",
+            allows: [
+                {
+                    resources: ["/api/restaurants",
+                                "/api/items"],
+                    permissions: "post"
+                }
+            ]
+        }, {
+            roles: "member",
+            allows: []
+        }, {
+            roles: "user",
+            allows: []
+        }
+    ]);
+
+    acl.addRoleParents( "member", "user");
+    acl.addRoleParents( "admin", "member" );
 
     // =====================================
     // LOGIN ===============================
     // =====================================
 
     // route to login
-    app.post('/login', function (req, res, next) {
+    app.post("/login", function (req, res, next) {
         passport.authenticate('local-login', function (err, user, info) {
             if (err) {
                 return next(err);
@@ -46,7 +92,7 @@ module.exports = function(app, passport) {
     // =====================================
 
     // process the signup form
-    app.post('/signup', function(req, res, next) {
+    app.post("/signup", function(req, res, next) {
 
         var json_resp = {
                             errors: {
@@ -105,7 +151,7 @@ module.exports = function(app, passport) {
     // =====================================
 
     // route for facebook authentication and login
-    app.post('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
+    app.post("/auth/facebook", passport.authenticate('facebook', { scope: 'email' }));
 
     // handle the callback after facebook has authenticated the user
     app.get('/auth/facebook/callback', function(req, res, next) {
@@ -128,14 +174,38 @@ module.exports = function(app, passport) {
     });
 
     // =====================================
-    // API ROUTES ==========================
+    // ADMIN ROUTES ========================
+    // =====================================
+
+    app.post("/api/restaurants", function(req, res) {
+
+    });
+
+    app.post("/api/items", function(req, res) {
+
+    });
+
+    // =====================================
+    // MEMBER ROUTES =======================
+    // =====================================
+
+    // TBD
+
+    // =====================================
+    // USER ROUTES =========================
+    // =====================================
+
+    // TBD
+
+    // =====================================
+    // GUEST ROUTES ========================
     // =====================================
 
     // get results of restaurant search
-    app.post('/api/results', function(req, res) {
+    app.post("/api/results", function(req, res) {
         // validate that only 5 restaurants are searched for
         if (req.body.restaurants.length > 5) {
-            res.status(403).send('Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first');
+            res.status(403).send("Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first");
             return;
         }
         var results = [];
@@ -165,7 +235,7 @@ module.exports = function(app, passport) {
     });
 
     // get all items
-    app.get('/api/items', function(req, res) {
+    app.get("/api/items", function(req, res) {
         Item.find({}, function(err, docs) {
             if(!err) {
                 res.json(docs);
@@ -177,7 +247,7 @@ module.exports = function(app, passport) {
     });
 
     // get all restaurants
-    app.get('/api/restaurants', function(req, res) {
+    app.get("/api/restaurants", function(req, res) {
         Restaurant.find({}, function(err, docs) {
             if(!err) {
                 res.json(docs);
@@ -193,8 +263,8 @@ module.exports = function(app, passport) {
     // =====================================
 
     // route to handle all angular requests
-    app.get('*', function(req, res) {
-        res.sendfile('./public/views/index.html');
+    app.get("*", function(req, res) {
+        res.sendfile("./public/views/index.html");
     });
 
 };

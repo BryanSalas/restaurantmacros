@@ -1,5 +1,3 @@
-// server.js
-
 // modules =================================================
 var express        = require('express');
 var app            = express();
@@ -12,34 +10,37 @@ var passport       = require('passport');
 var cookieParser   = require('cookie-parser');
 var session        = require('express-session');
 var MongoStore     = require('connect-mongo')(session);
-
-
-// configuration ===========================================
-
-require('./config/passport')(passport); // pass passport for configuration
+var acl            = require('acl');
 
 // compile less
-fs.readFile('./public/less/styles.less', function(err,styles) {
-    if(err) return console.error('Could not open file: %s',err);
+fs.readFile("./public/less/styles.less", function(err,styles) {
+    if(err) return console.error("Could not open file: %s", err);
+
     less.render(styles.toString(), {compress: true}, function(er,output) {
         if(er) return console.error(er);
-        fs.writeFile('./public/css/styles.css', output.css, function(e) {
+        fs.writeFile("./public/css/styles.css", output.css, function(e) {
             if(e) return console.error(e);
-            console.log('Successfully compiled less');
+            console.log("Successfully compiled less");
         });
     });
 });
 
-// config files
-var config = require('./config/db');
-
-// set our port
+var dbConfig = require("./config/db");
 var port = process.env.PORT || 3000;
 
-// connect to our mongoDB database
-mongoose.connect(config.url);
+// connect to mongoDB
+mongoose.connect(dbConfig.url, function(err) {
+    if(!err) {
+        acl = new acl(new acl.mongodbBackend(mongoose.connection.db, "acl_"));
 
-// get all data/stuff of the body (POST) parameters
+        // passport config
+        require('./config/passport')(passport, acl);
+
+        // set routes
+        require("./app/routes")(app, passport, acl);
+    }
+});
+
 // parse application/json
 app.use(bodyParser.json());
 
@@ -55,31 +56,27 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + '/public'));
 
-///////////////////////////////////////////////////////////
-// set up our express application
-//app.use(express.logger('dev')); // log every request to the console
-app.use(cookieParser()); // read cookies (needed for auth)
+// read cookies (needed for auth)
+app.use(cookieParser());
 
 // required for passport
 app.use(session({
-  secret: 'ilovescotchscotchyscotchscotch',
+  secret: "ilovescotchscotchyscotchscotch",
   maxAge: new Date(Date.now() + 3600000),
-  store: new MongoStore({mongooseConnection:mongoose.connection}),
+  store: new MongoStore({mongooseConnection: mongoose.connection}),
   resave: false,
   saveUninitialized: true
 }));
 
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
 
-// routes ==================================================
-require('./app/routes')(app, passport); // configure our routes
+// persistent login sessions
+app.use(passport.session());
 
-// start app ===============================================
+// start app
 app.listen(port);
 
-// shoutout to the user
-console.log('Running restaurantmacros on ' + port);
+console.log("Running restaurantmacros on " + port);
 
 // expose app
 exports = module.exports = app;
