@@ -35,9 +35,13 @@ module.exports = function(app, passport, acl) {
             roles: "admin",
             allows: [
                 {
-                    resources: ["/api/restaurants",
-                                "/api/items"],
+                    resources: ["/api/addRestaurant",
+                                "/api/addItem"],
                     permissions: "post"
+                },
+                {
+                    resources: ["/api/itemSchema"],
+                    permissions: "get"
                 }
             ]
         }, {
@@ -177,12 +181,25 @@ module.exports = function(app, passport, acl) {
     // ADMIN ROUTES ========================
     // =====================================
 
-    app.post("/api/restaurants", function(req, res) {
-
+    app.post("/api/addRestaurant", function(req, res) {
+        res.send(200);
     });
 
-    app.post("/api/items", function(req, res) {
+    app.post("/api/addItem", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
+        var newItem = new Item(req.body);
+        newItem.save(function(err) {
+            if(err) {
+                res.status(400).json(err.errors);
+            }
+            else {
+                res.send(200);
+            }
+        })
+    });
 
+
+    app.get("/api/itemSchema", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
+        res.json(Item.schema);
     });
 
     // =====================================
@@ -257,6 +274,8 @@ module.exports = function(app, passport, acl) {
             }
         });
     });
+
+    app.use(acl.middleware.errorHandler("json"));
 
     // =====================================
     // FRONTEND ROUTES =====================

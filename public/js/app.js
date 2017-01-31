@@ -61,6 +61,13 @@ define(['angularAMD',
            resolve: { loggedin: checkLoggedin }
         }))
 
+        .when("/add-item", angularAMD.route({
+           templateUrl: 'views/add-item.html',
+           controller: 'rmAddItem',
+           controllerUrl: 'controllers/add-item',
+           resolve: { loggedin: checkLoggedin }
+        }))
+
         .otherwise("/");
 
         $locationProvider.html5Mode(true);

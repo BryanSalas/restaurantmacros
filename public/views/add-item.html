@@ -1,0 +1,18 @@
+<div class="container">
+    <h1>Add Item</h1>
+    <!-- any errors from server -->
+    <p ng-repeat="err in serverErrors">
+        <span class="rm-warning">{{err.message}}</span>
+    </p>
+    <form ng-submit="addItem();" style="max-width: 200px; margin: 0 auto;">
+        <div ng-repeat="field in schema">
+            <input ng-if="!field.path.startsWith('_') && field.instance != 'ObjectID'" class="form-control"
+                   placeholder="{{field.path}}" ng-model="newItem[field.path]"
+                   type="{{field.instance == 'Number' ? 'number' : 'text'}}"/>
+            <select class="rm-sm-bot-margin" ng-model="newItem[field.path]" style="margin-bottom: 5px;" ng-if="!field.path.startsWith('_') && field.instance == 'ObjectID'">
+                <option value="{{restaurant._id}}" ng-repeat="restaurant in restaurants">{{restaurant.name}}</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">Add Item</button>
+    </form>
+</div>
