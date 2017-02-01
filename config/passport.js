@@ -92,12 +92,12 @@ module.exports = function(passport, acl) {
         function(req, email, password, done) {
 
             var json_resp = {
-                                errors: {
-                                    name: null,
-                                    email: null,
-                                    password: null
-                                }
-                            };
+                errors: {
+                    name: null,
+                    email: null,
+                    password: null
+                }
+            };
 
             // asynchronous
             // User.findOne wont fire unless data is sent back

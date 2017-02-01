@@ -61,7 +61,7 @@ app.use(cookieParser());
 
 // required for passport
 app.use(session({
-  secret: "ilovescotchscotchyscotchscotch",
+  secret: process.env.SESSION_SECRET,
   maxAge: new Date(Date.now() + 3600000),
   store: new MongoStore({mongooseConnection: mongoose.connection}),
   resave: false,
