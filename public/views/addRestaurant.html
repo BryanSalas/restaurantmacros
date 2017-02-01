@@ -1,0 +1,19 @@
+<div class="container">
+    <h1>Add Restaurant</h1>
+    <!-- any errors from server -->
+    <p ng-repeat="err in serverErrors">
+        <span class="rm-warning">{{err.message}}</span>
+    </p>
+    <!-- success message -->
+    <p>
+        <span class="rm-success">{{message}}</span>
+    </p>
+    <form ng-submit="addRestaurant();" class="rm-admin-form">
+        <div ng-repeat="field in schema">
+            <input ng-if="!field.path.startsWith('_') && field.instance != 'ObjectID'" class="form-control"
+                   placeholder="{{field.path}}" ng-model="newRestaurant[field.path]"
+                   type="{{field.instance == 'Number' ? 'number' : 'text'}}"/>
+        </div>
+        <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">Add Restaurant</button>
+    </form>
+</div>

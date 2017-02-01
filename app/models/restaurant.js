@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
 module.exports = mongoose.model('Restaurant', {
-    name : {type : String, default: ''},
-    website : {type : String, default: ''}
+    name : {type : String, required: true},
+    website : {type : String, required: true}
 });

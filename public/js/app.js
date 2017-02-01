@@ -62,10 +62,15 @@ define(['angularAMD',
         }))
 
         .when("/add-item", angularAMD.route({
-           templateUrl: 'views/add-item.html',
+           templateUrl: 'views/addItem.html',
            controller: 'rmAddItem',
-           controllerUrl: 'controllers/add-item',
-           resolve: { loggedin: checkLoggedin }
+           controllerUrl: 'controllers/addItem'
+        }))
+
+        .when("/add-restaurant", angularAMD.route({
+           templateUrl: 'views/addRestaurant.html',
+           controller: 'rmAddRestaurant',
+           controllerUrl: 'controllers/addRestaurant'
         }))
 
         .otherwise("/");
@@ -90,13 +95,13 @@ define(['angularAMD',
 
         $scope.user = {};
         $scope.newUser = {
-                            validation_errors: {
-                                name: "Please enter your full name",
-                                email: "Please enter a valid e-mail address",
-                                password: "Please enter a password",
-                                confirm_password: "Passwords do not match"
-                            }
-                         }
+            validation_errors: {
+                name: "Please enter your full name",
+                email: "Please enter a valid e-mail address",
+                password: "Please enter a password",
+                confirm_password: "Passwords do not match"
+            }
+        }
 
 
         $scope.showLoginModal = function() {
@@ -143,8 +148,9 @@ define(['angularAMD',
 
         $scope.logout = function() {
 	        $http.post("/logout").then(function(result) {
-	            // reload page
-	            $window.location.reload();
+	            // redirect to home
+	            $location.url('/');
+	            $rootScope.loggedInUser = null;
 	        }, function(result) {
 	            // error logging out
 	            console.log(result);

@@ -35,12 +35,15 @@ module.exports = function(app, passport, acl) {
             roles: "admin",
             allows: [
                 {
-                    resources: ["/api/addRestaurant",
-                                "/api/addItem"],
+                    resources: ["/api/add_restaurant",
+                                "/api/add_item"],
                     permissions: "post"
                 },
                 {
-                    resources: ["/api/itemSchema"],
+                    resources: ["/api/item_schema",
+                                "/api/restaurant_schema",
+                                "/add-item",
+                                "/add-restaurant"],
                     permissions: "get"
                 }
             ]
@@ -178,14 +181,22 @@ module.exports = function(app, passport, acl) {
     });
 
     // =====================================
-    // ADMIN ROUTES ========================
+    // ADMIN API ROUTES ====================
     // =====================================
 
-    app.post("/api/addRestaurant", function(req, res) {
-        res.send(200);
+    app.post("/api/add_restaurant", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
+        var newRestaurant = new Restaurant(req.body);
+        newRestaurant.save(function(err) {
+            if(err) {
+                res.status(400).json(err.errors);
+            }
+            else {
+                res.send(200);
+            }
+        })
     });
 
-    app.post("/api/addItem", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
+    app.post("/api/add_item", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
         var newItem = new Item(req.body);
         newItem.save(function(err) {
             if(err) {
@@ -197,25 +208,40 @@ module.exports = function(app, passport, acl) {
         })
     });
 
-
-    app.get("/api/itemSchema", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
+    app.get("/api/item_schema", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
         res.json(Item.schema);
     });
 
+    app.get("/api/restaurant_schema", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
+        res.json(Restaurant.schema);
+    });
+
     // =====================================
-    // MEMBER ROUTES =======================
+    // ADMIN UI ROUTES =====================
+    // =====================================
+
+    app.get("/add-item", [authenticated, acl.middleware(1, get_user_id)], function(req, res) {
+        res.sendfile("./public/views/index.html");
+    });
+
+    app.get("/add-restaurant", [authenticated, acl.middleware(1, get_user_id)], function(req, res) {
+        res.sendfile("./public/views/index.html");
+    })
+
+    // =====================================
+    // MEMBER API ROUTES ===================
     // =====================================
 
     // TBD
 
     // =====================================
-    // USER ROUTES =========================
+    // USER API ROUTES =====================
     // =====================================
 
     // TBD
 
     // =====================================
-    // GUEST ROUTES ========================
+    // GUEST API ROUTES ====================
     // =====================================
 
     // get results of restaurant search

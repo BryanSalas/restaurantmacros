@@ -4,7 +4,11 @@
     <p ng-repeat="err in serverErrors">
         <span class="rm-warning">{{err.message}}</span>
     </p>
-    <form ng-submit="addItem();" style="max-width: 200px; margin: 0 auto;">
+    <!-- success message -->
+    <p>
+        <span class="rm-success">{{message}}</span>
+    </p>
+    <form ng-submit="addItem();" class="rm-admin-form">
         <div ng-repeat="field in schema">
             <input ng-if="!field.path.startsWith('_') && field.instance != 'ObjectID'" class="form-control"
                    placeholder="{{field.path}}" ng-model="newItem[field.path]"

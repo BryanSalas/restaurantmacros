@@ -144,7 +144,7 @@ module.exports = function(passport, acl) {
                                     }
 
                                     // set user role
-                                    acl.addUserRoles(newUser._id, "user");
+                                    acl.addUserRoles(newUser._id.toString(), "user");
 
                                     return done(null, newUser);
                                 });
