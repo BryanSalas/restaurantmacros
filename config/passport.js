@@ -15,7 +15,7 @@ module.exports = function(passport, acl) {
         if (!err){
             facebookClientID = docs[0].secrets.clientID;
             facebookClientSecret = docs[0].secrets.clientSecret;
-            facebookCallbackURL = "http://localhost:3000/auth/facebook/callback";
+            facebookCallbackURL = "http://www.restaurantmacros.com/auth/facebook/callback";
             setPassportConfig();
         }
         else {
