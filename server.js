@@ -73,6 +73,16 @@ app.use(passport.initialize());
 // persistent login sessions
 app.use(passport.session());
 
+function ensureSecure(req, res, next){
+    if(req.headers["X-Forwarded-Proto"] == "http"){
+        res.redirect('https://' + req.hostname + req.url);
+    };
+    // handle port numbers if you need non defaults
+    return next();
+};
+
+app.all('*', ensureSecure); // at top of routing calls
+
 // start app
 app.listen(port);
 
