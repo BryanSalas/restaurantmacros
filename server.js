@@ -74,8 +74,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 function ensureSecure(req, res, next){
-    console.log(req.headers);
-    if(req.headers["X-Forwarded-Proto"] == "http"){
+    if(req.headers["x-forwarded-proto"] == "http"){
         res.redirect('https://' + req.hostname + req.url);
     };
     // handle port numbers if you need non defaults
