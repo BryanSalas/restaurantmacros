@@ -159,8 +159,11 @@ define(['angularAMD',
 
         $scope.hide_alert = true;
 	    $scope.nav_tabs = [
-	        {label:'Home', route:'/'},
-	        {label:'Search', route:'/search'}
+	        {label: "Home", route: "/"},
+	        {label: "Search", route: "/search"},
+	        {label: "Restaurants", route: "/restaurants"},
+	        {label: "Menu Items", route: "/items"},
+	        {label: "About", route: "/about"}
 	    ];
 
 	    $scope.nav_tabs_right_no_auth = [
