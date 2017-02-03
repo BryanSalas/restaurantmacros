@@ -27,168 +27,165 @@
         </script>
     </head>
     <body ng-cloak ng-controller="mainCtrl">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" style="padding-top: 0;" href="/">
-                        <img ng-src="img/logo_plate.png" style="width: 50px;"/>
-                    </a>
-                    <a class="navbar-brand" href="/">Restaurant Macros</a>
-                </div>
+        <div class="container">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" style="padding-top: 0;" href="/">
+                            <img ng-src="img/logo_plate.png" style="width: 50px;"/>
+                        </a>
+                        <a class="navbar-brand hidden-sm" id="rm-brand-text" href="/">Restaurant Macros</a>
+                    </div>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li ng-repeat="tab in nav_tabs" ng-class="{'active': tab.route == cur_tab}">
-                            <a href="{{tab.route}}">{{tab.label}}</a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
-                                <a href ng-click="showLoginModal();">Login</a>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li ng-repeat="tab in nav_tabs" ng-class="{'active': tab.route == cur_tab}">
+                                <a href="{{tab.route}}">{{tab.label}}</a>
                             </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
                             <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
-                                <a href ng-click="showSignupModal();">Signup</a>
-                            </li>
-                            <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth"
-                                ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
-                            <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
-                    </ul>
+                                    <a href ng-click="showLoginModal();">Login</a>
+                                </li>
+                                <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
+                                    <a href ng-click="showSignupModal();">Signup</a>
+                                </li>
+                                <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth"
+                                    ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
+                                <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Login Modal -->
+            <div id="loginSignupModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Login Modal content-->
+                    <div ng-if="showModal == 'login'" class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Login to Restaurant Macros</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- any errors from server -->
+                            <p ng-repeat="err in user.server_errors">
+                                <span class="rm-warning" ng-if="err">{{err}}</span>
+                            </p>
+                            <form ng-submit="login()" name="loginForm">
+                                <img ng-src="img/logo_plate.png" class="rm-sm-img rm-sm-bot-margin" />
+
+                                <!-- Email -->
+                                <input type="email" class="form-control rm-sm-bot-margin" placeholder="E-mail"
+                                       ng-model="user.email" name="email" autocomplete="email" required/>
+
+                                <!-- Password -->
+                                <input type="password" class="form-control rm-full-width" placeholder="Password"
+                                       ng-model="user.password" required/><br/>
+
+                                <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">Login</button>
+                            </form>
+                            <form action="/auth/facebook" method="post">
+                                <div>
+                                    <button type="submit" class="btn btn-primary rm-full-width">
+                                        <span class="fa fa-facebook"></span> Login with Facebook</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer rm-center-text">
+                            <div>Don't have an account? <a href ng-click="showSignupModal()">Sign up</a></div>
+                        </div>
+                    </div>
+
+                    <!-- Signup Modal content-->
+                    <div ng-if="showModal == 'signup'" class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Create your Restaurant Macros account</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- any errors from server -->
+                            <p ng-repeat="err in newUser.server_errors">
+                                <span class="rm-warning" ng-if="err">{{err}}</span>
+                            </p>
+                            <form ng-submit="signup()" name="signupForm">
+                                <img ng-src="img/logo_plate.png" class="rm-sm-img rm-sm-bot-margin"/>
+
+                                <!-- Name -->
+                                <input type="text" class="form-control rm-sm-bot-margin"
+                                       ng-class="{'warning': signupForm.name.$invalid && validateSignupName}"
+                                       placeholder="Full Name*"
+                                       ng-model="newUser.name" name="name" autocomplete="name"
+                                       ng-blur="validateSignupName = true"
+                                       ng-focus="validateSignupName = false" required/>
+                                <p ng-show="signupForm.name.$invalid && validateSignupName"
+                                   class="help-block rm-warning">{{ newUser.validation_errors.name }}</p>
+
+                                <!-- Email -->
+                                <input type="email" class="form-control rm-sm-bot-margin"
+                                       ng-class="{'warning': signupForm.email.$invalid && validateSignupEmail}"
+                                       placeholder="E-mail address*"
+                                       ng-model="newUser.email" name="email"
+                                       autocomplete="email"
+                                       ng-blur="validateSignupEmail = true"
+                                       ng-focus="validateSignupEmail = false" required/>
+                                <p ng-show="signupForm.email.$invalid && validateSignupEmail"
+                                   class="help-block rm-warning">{{ newUser.validation_errors.email }}</p>
+
+                                <!-- Password -->
+                                <input type="password"
+                                       class="form-control rm-sm-bot-margin"
+                                       ng-class="{'warning': newUser.password_missing}"
+                                       placeholder="Password*"
+                                       ng-model="newUser.password" name="password" autocomplete="off" required/>
+                                <p ng-show="newUser.password_missing"
+                                   class="help-block rm-warning">{{ newUser.validation_errors.password }}</p>
+
+                                <!-- Confirm Password -->
+                                <input type="password"
+                                       class="form-control rm-sm-bot-margin"
+                                       placeholder="Confirm Password*"
+                                       ng-model="newUser.confirm_password" name="password" autocomplete="off" required/>
+                                <p ng-show="newUser.password != newUser.confirm_password"
+                                   class="help-block rm-warning">{{ newUser.validation_errors.confirm_password }}</p><br/>
+
+                                <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">
+                                    Sign up
+                                </button>
+                            </form>
+                            <form action="/auth/facebook" method="post">
+                                <div>
+                                    <button type="submit" class="btn btn-primary rm-full-width">
+                                        <span class="fa fa-facebook"></span> Sign up with Facebook</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer rm-center-text">
+                            <div>Already have an account? <a href ng-click="showLoginModal();">Login</a></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </nav>
 
-        <!-- Login Modal -->
-        <div id="loginSignupModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Login Modal content-->
-                <div ng-if="showModal == 'login'" class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Login to Restaurant Macros</h4>
-                    </div>
-                    <div class="modal-body">
-                        <!-- any errors from server -->
-                        <p ng-repeat="err in user.server_errors">
-                            <span class="rm-warning" ng-if="err">{{err}}</span>
-                        </p>
-                        <form ng-submit="login()" name="loginForm">
-                            <img ng-src="img/logo_plate.png" class="rm-sm-img rm-sm-bot-margin" />
-
-                            <!-- Email -->
-                            <input type="email" class="form-control" placeholder="E-mail"
-                                   ng-model="user.email" name="email" autocomplete="email" required/>
-
-                            <!-- Password -->
-                            <input type="password" class="form-control rm-full-width" placeholder="Password"
-                                   ng-model="user.password" required/><br/>
-
-                            <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">Login</button>
-                        </form>
-                        <form action="/auth/facebook" method="post">
-                            <div>
-                                <button type="submit" class="btn btn-primary rm-full-width">
-                                    <span class="fa fa-facebook"></span> Login with Facebook</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer rm-center-text">
-                        <div>Don't have an account? <a href ng-click="showSignupModal()">Sign up</a></div>
-                    </div>
+            <!-- alerts -->
+            <!--<div class="rm-center-text">
+                <div id="alert-box" ng-class="{'rm-hidden': hide_alert}" class="alert alert-dismissible" role="alert">
+                    <button type="button" ng-click="hideAlert();" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{alert_text}}
                 </div>
-
-                <!-- Signup Modal content-->
-                <div ng-if="showModal == 'signup'" class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Create your Restaurant Macros account</h4>
-                    </div>
-                    <div class="modal-body">
-                        <!-- any errors from server -->
-                        <p ng-repeat="err in newUser.server_errors">
-                            <span class="rm-warning" ng-if="err">{{err}}</span>
-                        </p>
-                        <form ng-submit="signup()" name="signupForm">
-                            <img ng-src="img/logo_plate.png" class="rm-sm-img rm-sm-bot-margin"/>
-
-                            <!-- Name -->
-                            <input type="text" class="form-control"
-                                   ng-class="{'warning': signupForm.name.$invalid && validateSignupName}"
-                                   placeholder="Full Name*"
-                                   ng-model="newUser.name" name="name" autocomplete="name"
-                                   ng-blur="validateSignupName = true"
-                                   ng-focus="validateSignupName = false" required/>
-                            <p ng-show="signupForm.name.$invalid && validateSignupName"
-                               class="help-block rm-warning">{{ newUser.validation_errors.name }}</p>
-
-                            <!-- Email -->
-                            <input type="email" class="form-control"
-                                   ng-class="{'warning': signupForm.email.$invalid && validateSignupEmail}"
-                                   placeholder="E-mail address*"
-                                   ng-model="newUser.email" name="email"
-                                   autocomplete="email"
-                                   ng-blur="validateSignupEmail = true"
-                                   ng-focus="validateSignupEmail = false" required/>
-                            <p ng-show="signupForm.email.$invalid && validateSignupEmail"
-                               class="help-block rm-warning">{{ newUser.validation_errors.email }}</p>
-
-                            <!-- Password -->
-                            <input type="password"
-                                   class="form-control rm-full-width"
-                                   ng-class="{'warning': newUser.password_missing}"
-                                   placeholder="Password*"
-                                   ng-model="newUser.password" name="password" autocomplete="off" required/>
-                            <p ng-show="newUser.password_missing"
-                               class="help-block rm-warning">{{ newUser.validation_errors.password }}</p>
-
-                            <!-- Confirm Password -->
-                            <input type="password"
-                                   class="form-control rm-full-width"
-                                   placeholder="Confirm Password*"
-                                   ng-model="newUser.confirm_password" name="password" autocomplete="off" required/>
-                            <p ng-show="newUser.password != newUser.confirm_password"
-                               class="help-block rm-warning">{{ newUser.validation_errors.confirm_password }}</p><br/>
-
-                            <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">
-                                Sign up
-                            </button>
-                        </form>
-                        <form action="/auth/facebook" method="post">
-                            <div>
-                                <button type="submit" class="btn btn-primary rm-full-width">
-                                    <span class="fa fa-facebook"></span> Sign up with Facebook</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer rm-center-text">
-                        <div>Already have an account? <a href ng-click="showLoginModal();">Login</a></div>
-                    </div>
-                </div>
-            </div>
+            </div> -->
+            <div ng-view></div>
         </div>
-
-        <!-- alerts -->
-        <!--<div class="rm-center-text">
-            <div id="alert-box" ng-class="{'rm-hidden': hide_alert}" class="alert alert-dismissible" role="alert">
-                <button type="button" ng-click="hideAlert();" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{alert_text}}
-            </div>
-        </div> -->
-        <div ng-view></div>
-        <!--<footer class="footer">
-              <div class="container">
-                  <p>Restaurant Macros was developed by Bryan Salas</p>
-              </div>
-        </footer> -->
     </body>
 </html>

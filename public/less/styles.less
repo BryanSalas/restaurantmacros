@@ -23,7 +23,8 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     font-family: oswaldregular;
 
     .modal {
@@ -37,7 +38,7 @@ body {
 
     .modal-body {
         text-align: center;
-        width: 50%;
+        width: 320px;
         margin: 0 auto;
     }
 }
@@ -71,36 +72,76 @@ body {
     width: 34px;
 }
 
-.navbar-default {
-    background-color: white;
-}
-
 /*
 **
 ** BOOTSTRAP OVERWRITES
 **
 */
+#rm-brand-text {
+    margin-left: -15px;
+}
+
+.navbar-default {
+    background-color: white;
+}
+
+.marketing .col-lg-4 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.marketing h2 {
+  font-weight: normal;
+}
+.marketing .col-lg-4 p {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.featurette-divider {
+  margin: 80px 0;
+}
+
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+@media (min-width: 768px) {
+  /* Navbar positioning foo */
+  .navbar-wrapper {
+    margin-top: 20px;
+  }
+  .navbar-wrapper .container {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  .navbar-wrapper .navbar {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .navbar-wrapper .navbar {
+    border-radius: 4px;
+  }
+
+  .featurette-heading {
+    font-size: 50px;
+  }
+}
+
+@media (min-width: 992px) {
+  .featurette-heading {
+    margin-top: 120px;
+  }
+}
 
 /*
 **
 ** BUTTONS
 **
 */
-.btn-primary {
-  &.gradient {
-    background: linear-gradient(#91dd70, #55ae2e);
-    border: 1px solid #5aad35;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.15);
 
-    &:hover {
-      background: linear-gradient(#66b2cc,#33a6cc);
-    }
-
-    &:active {
-      background: linear-gradient(#267c99,#007299);
-    }
-  }
-}
 
 /*
 **
@@ -122,20 +163,6 @@ body {
 .rm-admin-form {
     max-width: 200px;
     margin: 0 auto;
-}
-
-.container {
-    font-size: 20px;
-    width: 65%;
-    text-align: center;
-}
-
-.jumbotron {
-    margin-top: 25px;
-    box-shadow: 0 0 2px black;
-    padding: 15px;
-    background-color: white;
-    display: inline-block;
 }
 
 // custom global classes
@@ -211,7 +238,6 @@ body {
 
 // search page
 .rm-search {
-    text-align: center;
 
     .macro-wrapper {
         margin-left: 10px;
@@ -219,13 +245,6 @@ body {
         >div {
             margin-right: 10px;
         }
-    }
-
-    .form-control {
-        width: 85px;
-        display: inline-block;
-        height: 100%;
-        font-size: 100%;
     }
 
     .twitter-typeahead {
