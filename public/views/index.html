@@ -26,11 +26,24 @@
         </script>
     </head>
     <body ng-cloak ng-controller="mainCtrl">
-        <!-- Fixed navbar -->
         <nav class="navbar navbar-default">
-            <div class="container">
-                <a class="pull-left" href="/"><img ng-src="img/logo.png" alt="Loading..." /></a>
-                <div id="navbar" class="navbar-collapse collapse">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" style="padding-top: 0;" href="/">
+                        <img ng-src="img/logo_plate.png" style="width: 50px;"/>
+                    </a>
+                    <a class="navbar-brand" href="/">Restaurant Macros</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li ng-repeat="tab in nav_tabs" ng-class="{'active': tab.route == cur_tab}">
                             <a href="{{tab.route}}">{{tab.label}}</a>
@@ -38,14 +51,14 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
-                            <a href ng-click="showLoginModal();">Login</a>
-                        </li>
-                        <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
-                            <a href ng-click="showSignupModal();">Signup</a>
-                        </li>
-                        <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth"
-                            ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
-                        <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
+                                <a href ng-click="showLoginModal();">Login</a>
+                            </li>
+                            <li ng-if="!loggedInUser" data-toggle="modal" data-target="#loginSignupModal">
+                                <a href ng-click="showSignupModal();">Signup</a>
+                            </li>
+                            <li ng-if="loggedInUser" ng-repeat="tab in nav_tabs_right_auth"
+                                ng-class="{'active': tab.route == cur_tab}"><a href="{{tab.route}}">{{tab.label}}</a></li>
+                            <li ng-if="loggedInUser"><a href="" ng-click="logout();">Log out</a></li>
                     </ul>
                 </div>
             </div>
