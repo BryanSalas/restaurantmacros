@@ -71,11 +71,6 @@ body {
     width: 34px;
 }
 
-.nav.navbar-nav {
-    padding-top: 23px;
-    padding-left: 15px;
-}
-
 .navbar-default {
     background-color: white;
 }
@@ -85,10 +80,6 @@ body {
 ** BOOTSTRAP OVERWRITES
 **
 */
-
-.form-control {
-    margin-bottom: 5px;
-}
 
 /*
 **
@@ -128,7 +119,6 @@ body {
 ** ADMIN PANEL
 **
 */
-
 .rm-admin-form {
     max-width: 200px;
     margin: 0 auto;
@@ -218,22 +208,6 @@ body {
         }
     }
 }
-
-// left panel on home and results page
-.panel {
-    position: fixed;
-    left: 25px;
-    width: 15%;
-    top: 181px;
-}
-.panel-body {
-    border-bottom: 1px solid @border-grey;
-    text-align: left;
-}
-.panel-heading {
-    background-color: white!important;
-}
-
 
 // search page
 .rm-search {
@@ -355,7 +329,12 @@ body {
     }
 }
 
-// results page
+
+/*
+**
+** RESULTS PAGE
+**
+*/
 .rm-results {
     .panel-body {
         &.selected {
@@ -475,27 +454,4 @@ body {
     }
 
 
-}
-.form-inline {
-    padding-top: 10px;
-}
-
-/* Calories, Protein etc... labels */
-label {
-    width: 142px;
-    font-size: 24px;
-}
-
-/* mobile menu dropdown */
-.navbar-toggle {
-    margin-top:12px;
-}
-
-/* Counting macros, made easy */
-h1 {
-    margin-bottom: 27px;
-}
-
-img {
-    width: 314px;
 }
