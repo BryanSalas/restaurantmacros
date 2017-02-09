@@ -5,9 +5,9 @@
            autocomplete="off" type="text" id="restaurant" placeholder="Start typing to select restaurants"
            ng-model="selected_restaurant" ng-change="selectedRestChanged();" data-role="tagsinput">
 
-        <div class="row" style="text-align: left; margin-top: 10px;">
-            <span ng-repeat="restaurant in selected_restaurants"
-                  style="background-color: rgba(0, 165, 149, 0.63); padding-left: 5px; border-radius: 6px; margin-right: 5px;">{{restaurant.name}} <span ng-click="selected_restaurants.splice($index,1);" class="glyphicon glyphicon-remove"/></span>
+        <div class="flex-row" style="margin-top: 5px; text-align: left; flex-wrap: wrap;">
+            <div ng-repeat="restaurant in selected_restaurants"
+                 style="display: inline; margin-top: 5px; background-color: rgba(0, 165, 149, 0.63); padding-left: 5px; border-radius: 6px; white-space: nowrap; margin-right: 5px;"><span>{{restaurant.name}} <span ng-click="selected_restaurants.splice($index,1);" class="glyphicon glyphicon-remove"/></span></div>
         </div>
 
         <div class="row">
