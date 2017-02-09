@@ -48,7 +48,7 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li ng-repeat="tab in nav_tabs" ng-class="{'active': tab.route == cur_tab}">
-                                <a href="{{tab.route}}">{{tab.label}}</a>
+                                <a href="{{tab.route}}" data-toggle="collapse" data-target=".navbar-collapse.in">{{tab.label}}</a>
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
