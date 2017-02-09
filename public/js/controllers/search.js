@@ -2,8 +2,8 @@ define(['app',
         'services/resultsService',
         'services/RestaurantService'],
         function (app) {
-    app.controller('rmSearch', ['$scope', 'rmResultsService', 'rmRestaurantService', '$location',
-    function($scope, $service, $restaurantService, $location) {
+    app.controller('rmSearch', ['$scope', 'rmResultsService', 'rmRestaurantService', '$location', "$anchorScroll",
+    function($scope, $service, $restaurantService, $location, $anchorScroll) {
 
         $scope.selected_restaurants = [];
 
@@ -134,6 +134,20 @@ define(['app',
                 });
             }
         });
+
+        $scope.gotoAnchor = function() {
+            var newHash = "restaurant";
+            if ($location.hash() !== newHash) {
+            // set the $location.hash to `newHash` and
+            // $anchorScroll will automatically scroll to it
+                $location.hash("restaurant");
+            }
+            else {
+                // call $anchorScroll() explicitly,
+                // since $location.hash hasn't changed
+                $anchorScroll();
+            }
+        };
 
     }]);
 });
