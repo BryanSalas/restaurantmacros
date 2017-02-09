@@ -247,31 +247,41 @@ module.exports = function(app, passport, acl) {
     // get results of restaurant search
     app.post("/api/results", function(req, res) {
         // validate that only 5 restaurants are searched for
-        if (req.body.restaurants.length > 5) {
+        if(req.body.restaurants.length > 5) {
             res.status(403).send("Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first");
             return;
         }
-        var results = [];
-        var cal_max = req.body.calories ? req.body.calories : 1233330;
-        var pro_max = req.body.protein ? req.body.protein : 123131230;
-        var fat_max = req.body.fat ? req.body.fat : 123123130;
-        var carb_max = req.body.carbs ? req.body.carbs : 123123130;
 
-        findItems(req.body.restaurants[0]);
-        //for(index in req.body.restaurants) {
-        //    searchRestaurant(req.body.brands[index]._id, req.body.brands[index].name, 0, {});
-        //}
+        var results = [];
+
+        var cal_max = req.body.calories == null ? Number.MAX_SAFE_INTEGER : req.body.calories;
+        var pro_max = req.body.protein == null ? Number.MAX_SAFE_INTEGER : req.body.protein;
+        var fat_max = req.body.fat == null ? Number.MAX_SAFE_INTEGER : req.body.fat;
+        var carb_max = req.body.carbs == null ? Number.MAX_SAFE_INTEGER : req.body.carbs;
+
+        for(i = 0; i < req.body.restaurants.length; i++) {
+            findItems(req.body.restaurants[i]);
+        }
+
         function findItems(rest) {
             Item.
-              find({restaurant: "587ed056bb2e6c69eaa4a118"}).
+              find({restaurant: rest._id}).
+              where("calories").lte(cal_max).
+              where("protein").lte(pro_max).
+              where("fat").lte(fat_max).
+              where("carbs").lte(carb_max).
               exec(callback);
 
             function callback(err, docs) {
                 if(!err) {
-                    res.json(docs);
+                    results.push(docs);
+                    // if this is the last search
+                    if(results.length == req.body.restaurants.length) {
+                        res.json(results);
+                    }
                 }
                 else {
-                    res.json({});
+                    res.json({"error": "Error searching"});
                 }
             }
         }

@@ -1,23 +1,26 @@
 <div class="rm-search">
     <div ng-show="!showLoading" class="jumbotron">
-        <p>Select which restaurants to search, then set a goal amount for each macro and hit go!</p>
-
+        <p>Select which restaurants to search, then set a goal amount for each macro and hit search!</p>
         <input ng-class="{'warning': already_selected || no_rest_selected}" class="typeahead form-control"
-               autocomplete="off" type="text" id="restaurant" placeholder="Start typing to select restaurants"
-               ng-model="selected_restaurant" ng-change="selectedRestChanged();" style="margin-bottom: 15px;">
+           autocomplete="off" type="text" id="restaurant" placeholder="Start typing to select restaurants"
+           ng-model="selected_restaurant" ng-change="selectedRestChanged();" data-role="tagsinput">
 
-        <!--<div class="flex-row justify-center" style="margin-top: 15px;">
-            <button style="margin-left: 15px;" class="btn btn-lg btn-success" ng-click="doSearch();">
-                <span ng-if="!showLoading">Go</span>
-            </button>
-        </div>-->
+        <div class="row" style="text-align: left; margin-top: 10px;">
+            <span ng-repeat="restaurant in selected_restaurants"
+                  style="background-color: rgba(0, 165, 149, 0.63); padding-left: 5px; border-radius: 6px; margin-right: 5px;">{{restaurant.name}} <span ng-click="selected_restaurants.splice($index,1);" class="glyphicon glyphicon-remove"/></span>
+        </div>
 
         <div class="row">
-            <div ng-repeat="macro in macros" class="col-lg-3" style="text-align: center;">
-                <label for="{{macro.name}}">{{macro.name}}</label>
+            <div class="col-sm-3" ng-repeat="macro in macros" style="margin-bottom: 15px; margin-top: 15px;">
+                <div for="{{macro.name}}">{{macro.name}}</div>
                 <input ng-class="{'warning': macro.error}" type="number" ng-model="macro.value" placeholder="Any"
-                           class="form-control" id="{{macro.name}}" style="width:100px; margin: 5px auto;"/>
-            </div><!-- /.col-lg-4 -->
+                           class="form-control" id="{{macro.name}}" style="width:80px; margin: auto;"/>
+            </div>
+        </div>
+
+        <button style="width: 100%; margin-top: 15px;" class="btn btn-lg btn-success" ng-click="doSearch();">
+            <span ng-if="!showLoading"><span class="glyphicon glyphicon-search"/> Search</span>
+        </button>
       </div><!-- /.row -->
 
     </div>

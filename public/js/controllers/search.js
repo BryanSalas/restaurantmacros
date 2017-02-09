@@ -69,6 +69,10 @@ define(['app',
             return item;
         }
 
+        $scope.removeRestaurant = function(id) {
+            $scope.selected_restaurants.splice($scope.selected_restaurants.indexOf)
+        }
+
         $scope.updateRestaurants = function() {
             $restaurantService.load();
         }

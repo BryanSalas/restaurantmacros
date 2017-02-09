@@ -2,17 +2,6 @@
     <div class="jumbotron">
         <div class="rm-results">
 
-            <!-- left panel -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Restaurants</h3>
-                </div>
-                <div ng-repeat="result in results" class="panel-body"
-                     ng-click="selectRestaurant(result)" ng-class="{'selected': selected_restaurant == result}">
-                    {{result.brand_name}}
-                </div>
-            </div>
-
             <!-- fixed header -->
             <div class="results-header" ng-class="{'fixed-header': fixed_header}" ng-style="fixed_width">
                 <div ng-show="selected_restaurant.tab_selected == 'food'" class="flex-row align-center">
