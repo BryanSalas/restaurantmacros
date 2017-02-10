@@ -253,6 +253,7 @@ module.exports = function(app, passport, acl) {
         }
 
         var results = [];
+        var restaurantsFinished = 0;
 
         var cal_max = req.body.calories == null ? Number.MAX_SAFE_INTEGER : req.body.calories;
         var pro_max = req.body.protein == null ? Number.MAX_SAFE_INTEGER : req.body.protein;
@@ -270,13 +271,16 @@ module.exports = function(app, passport, acl) {
               where("protein").lte(pro_max).
               where("fat").lte(fat_max).
               where("carbs").lte(carb_max).
+              populate("restaurant").
               exec(callback);
 
             function callback(err, docs) {
                 if(!err) {
-                    results.push(docs);
+                    console.log(docs);
+                    results = results.concat(docs);
+                    restaurantsFinished++;
                     // if this is the last search
-                    if(results.length == req.body.restaurants.length) {
+                    if(restaurantsFinished == req.body.restaurants.length) {
                         res.json(results);
                     }
                 }

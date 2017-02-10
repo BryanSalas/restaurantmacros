@@ -1,19 +1,40 @@
 define(['app', 'services/resultsService'], function (app) {
     app.controller('rmResults', ['$scope', 'rmResultsService', '$location', '$window',
     function($scope, $service, $location, $window) {
-        $scope.food_headers = [{'key': 'item_name', 'name': 'Food'},
-                               {'key': 'nf_calories', 'name': 'Calories'},
-                               {'key': 'nf_total_carbohydrate', 'name': 'Carbs'},
-                               {'key': 'nf_total_fat', 'name': 'Fat'},
-                               {'key': 'nf_protein', 'name': 'Protein'}];
+        $scope.food_headers = [
+            {"key": "restaurant_name", "name": "Restaurant"},
+            {"key": "name", "name": "Food"},
+            {"key": "calories", "name": "Calories"},
+            {"key": "carbs", "name": "Carbs"},
+            {"key": "fat", "name": "Fat"},
+            {"key": "protein", "name": "Protein"}
+        ];
 
-        $scope.meal_headers = [{'key': 'name', 'name': 'Meal'},
-                               {'key': 'calories', 'name': 'Calories'},
-                               {'key': 'carbs', 'name': 'Carbs'},
-                               {'key': 'fat', 'name': 'Fat'},
-                               {'key': 'protein', 'name': 'Protein'}];
+        //$scope.results = $service.get();
 
-        $scope.results = $service.get();
+        $scope.results = [
+            {
+                "_id":"589bd4d90467500821ca9931",
+                "restaurant":{"_id":"589bb881a0d61ec01608dff0","name":"chilis","website":"chilis.com","__v":0},
+                "name":"fries",
+                "calories":400,
+                "protein":4,
+                "fat":20,
+                "carbs":23,
+                "__v":0
+            },
+            {
+                "_id":"589d298f2241a1ac141b82fe",
+                "restaurant":{"_id":"589bc18570af86301ff21207","name":"freebirds","website":"freebirds.com","__v":0},
+                "name":"burrito",
+                "calories":1000,
+                "protein":12,
+                "fat":12,
+                "carbs":203,
+                "__v":0
+            }
+        ]
+
 
         if(!$scope.results) {
             $location.path('/');
