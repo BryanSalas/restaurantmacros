@@ -92,11 +92,11 @@
                                 <input type="password" class="form-control rm-full-width" placeholder="Password"
                                        ng-model="user.password" required/><br/>
 
-                                <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">Login</button>
+                                <button type="submit" class="btn-lg btn-success rm-full-width rm-sm-bot-margin">Login</button>
                             </form>
                             <form action="/auth/facebook" method="post">
                                 <div>
-                                    <button type="submit" class="btn btn-primary rm-full-width">
+                                    <button type="submit" class="btn-lg btn-primary rm-full-width">
                                         <span class="fa fa-facebook"></span> Login with Facebook</button>
                                 </div>
                             </form>
@@ -158,13 +158,13 @@
                                 <p ng-show="newUser.password != newUser.confirm_password"
                                    class="help-block rm-warning">{{ newUser.validation_errors.confirm_password }}</p><br/>
 
-                                <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">
+                                <button type="submit" class="btn-lg btn-success rm-full-width rm-sm-bot-margin">
                                     Sign up
                                 </button>
                             </form>
                             <form action="/auth/facebook" method="post">
                                 <div>
-                                    <button type="submit" class="btn btn-primary rm-full-width">
+                                    <button type="submit" class="btn-lg btn-primary rm-full-width">
                                         <span class="fa fa-facebook"></span> Sign up with Facebook</button>
                                 </div>
                             </form>

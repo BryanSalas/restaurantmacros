@@ -1,6 +1,6 @@
 <div class="rm-search">
     <div ng-show="!showLoading" class="jumbotron">
-        <p>Select which restaurants to search, then set a goal amount for each macro and hit search!</p>
+        <p>Select up to 5 restaurants to search, then set a goal amount for each macro and hit search!</p>
         <input ng-click="gotoAnchor();" ng-class="{'warning': already_selected || no_rest_selected}" class="typeahead form-control"
            autocomplete="off" type="text" id="restaurant" placeholder="Start typing to select restaurants"
            ng-model="selected_restaurant" ng-change="selectedRestChanged();" data-role="tagsinput">
@@ -10,19 +10,21 @@
                  style="display: inline; margin-top: 5px; background-color: rgba(0, 165, 149, 0.63); padding-left: 5px; border-radius: 6px; white-space: nowrap; margin-right: 5px;"><span>{{restaurant.name}} <span ng-click="selected_restaurants.splice($index,1);" class="glyphicon glyphicon-remove"/></span></div>
         </div>
 
-        <div class="row">
-            <div class="col-sm-3" ng-repeat="macro in macros" style="margin-bottom: 15px; margin-top: 15px;">
-                <div for="{{macro.name}}">{{macro.name}}</div>
-                <input ng-class="{'warning': macro.error}" type="number" ng-model="macro.value" placeholder="Any"
-                           class="form-control" id="{{macro.name}}" style="width:80px; margin: auto;"/>
+        <div style="max-width: 500px; margin: 0 auto;">
+
+
+            <div class="row">
+                <div class="col-sm-3" ng-repeat="macro in macros" style="margin-bottom: 15px; margin-top: 15px;">
+                    <div for="{{macro.name}}">{{macro.name}}</div>
+                    <input ng-class="{'warning': macro.error}" type="number" ng-model="macro.value" placeholder="Any"
+                               class="form-control" id="{{macro.name}}" style="width:80px; margin: auto;"/>
+                </div>
             </div>
+
+            <button style="width: 100%; margin-top: 15px;" class="btn-lg btn-success" ng-click="doSearch();">
+                <span ng-if="!showLoading"><span class="glyphicon glyphicon-search"/> Search</span>
+            </button>
         </div>
-
-        <button style="width: 100%; margin-top: 15px;" class="btn btn-lg btn-success" ng-click="doSearch();">
-            <span ng-if="!showLoading"><span class="glyphicon glyphicon-search"/> Search</span>
-        </button>
-      </div><!-- /.row -->
-
     </div>
 
     <div ng-if="showLoading">
