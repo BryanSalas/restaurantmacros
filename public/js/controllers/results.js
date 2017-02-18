@@ -10,9 +10,9 @@ define(['app', 'services/resultsService'], function (app) {
             {"key": "protein", "name": "Protein"}
         ];
 
-        //$scope.results = $service.get();
+        $scope.results = $service.get();
 
-        $scope.results = [
+        /*$scope.results = [
             {
                 "_id":"589bd4d90467500821ca9931",
                 "restaurant":{"_id":"589bb881a0d61ec01608dff0","name":"chilis","website":"chilis.com","__v":0},
@@ -33,7 +33,7 @@ define(['app', 'services/resultsService'], function (app) {
                 "carbs":203,
                 "__v":0
             }
-        ]
+        ]*/
 
 
         if(!$scope.results) {
