@@ -94,13 +94,14 @@ footer {
     text-align: center;
 }
 
-.table {
-    font-size: 14px;
-}
-
 .row {
     margin: 0;
 }
+
+
+
+
+
 
 .navbar-default {
     background-color: white;
@@ -123,6 +124,19 @@ footer {
   font-weight: 300;
   line-height: 1;
   letter-spacing: -1px;
+}
+
+@media (max-width: 768px) {
+    .table {
+        font-size: 14px;
+    }
+    .table>thead>tr>th {
+        padding: 4px;
+    }
+
+    .table>tbody>tr>td {
+        padding: 4px;
+    }
 }
 
 @media (min-width: 768px) {
@@ -374,6 +388,9 @@ footer {
 **
 */
 .rm-results {
+
+    overflow-x: auto;
+
     .panel-body {
         &.selected {
             background-color: @main-grey;
@@ -468,28 +485,5 @@ footer {
             }
         }
     }
-
-    .meal-data {
-        margin-bottom: 20px;
-        display: inline-block;
-    }
-
-    .food-in-meal {
-        margin-bottom: 10px;
-        line-height: 30px;
-    }
-
-    .glyphicon-triangle-right {
-        transition: transform .3s ease;
-        &:hover {
-            cursor: pointer;
-        }
-
-        &.open {
-            transform: rotate(90deg);
-            margin-bottom: 24px;
-        }
-    }
-
 
 }

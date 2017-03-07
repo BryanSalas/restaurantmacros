@@ -7,7 +7,7 @@ define(['app',
 
         $scope.selected_restaurants = [];
 
-        $scope.max_restaurants = 5;
+        $scope.max_restaurants = 2;
 
         $scope.macros = {"calories": {"name": "Calories", "value": null},
                         "carbs": {"name": "Carbs", "value": null},
