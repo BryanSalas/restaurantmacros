@@ -4,16 +4,16 @@
     <p ng-repeat="err in serverErrors">
         <span class="rm-warning">{{err.message}}</span>
     </p>
-    <!-- success message -->
+
+    <div style="margin-bottom: 15px;" ng-repeat="field in schema" ng-if="field.instance == 'String'">
+        <p>{{field.path}}</p>
+        <input class="form-control" ng-model="newRestaurant[field.path]">
+    </div>
+
+    <button class="btn btn-success" ng-click="addRestaurant()">Add</button>
+
     <p>
         <span class="rm-success">{{message}}</span>
     </p>
-    <form ng-submit="addRestaurant();" class="rm-admin-form">
-        <div ng-repeat="field in schema">
-            <input ng-if="!field.path.startsWith('_') && field.instance != 'ObjectID'" class="form-control"
-                   placeholder="{{field.path}}" ng-model="newRestaurant[field.path]"
-                   type="{{field.instance == 'Number' ? 'number' : 'text'}}"/>
-        </div>
-        <button type="submit" class="btn btn-success rm-full-width rm-sm-bot-margin">Add Restaurant</button>
-    </form>
+
 </div>
