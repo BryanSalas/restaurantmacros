@@ -1,6 +1,6 @@
 <div class="rm-search">
     <div ng-show="!showLoading" class="jumbotron">
-        <p>Select up to 5 restaurants to search, then set a goal amount for each macro and hit search!</p>
+        <p>Select up to 2 restaurants to search, then set a goal amount for each macro and hit search!</p>
         <input ng-click="gotoAnchor();" ng-class="{'warning': already_selected || no_rest_selected}" class="typeahead form-control"
            autocomplete="off" type="text" id="restaurant" placeholder="Start typing to select restaurants"
            ng-model="selected_restaurant" ng-change="selectedRestChanged();" data-role="tagsinput">

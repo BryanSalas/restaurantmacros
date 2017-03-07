@@ -1,9 +1,7 @@
-var http     = require('http');
 var request  = require('request');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var Restaurant = require('./models/restaurant');
-var Item       = require('./models/item');
 
 // Authentication middleware for passport
 function authenticated(request, response, next) {
@@ -35,14 +33,11 @@ module.exports = function(app, passport, acl) {
             roles: "admin",
             allows: [
                 {
-                    resources: ["/api/add_restaurant",
-                                "/api/add_item"],
+                    resources: ["/api/add_restaurant"],
                     permissions: "post"
                 },
                 {
-                    resources: ["/api/item_schema",
-                                "/api/restaurant_schema",
-                                "/add-item",
+                    resources: ["/api/restaurant_schema",
                                 "/add-restaurant"],
                     permissions: "get"
                 }
@@ -58,6 +53,10 @@ module.exports = function(app, passport, acl) {
 
     acl.addRoleParents( "member", "user");
     acl.addRoleParents( "admin", "member" );
+
+    // set Nutritionix APP_ID and APP_KEY
+    app.locals.NUTRITIONIX_APP_ID = process.env.NUTRITIONIX_APP_ID;
+    app.locals.NUTRITIONIX_APP_KEY = process.env.NUTRITIONIX_APP_KEY;
 
     // =====================================
     // LOGIN ===============================
@@ -185,31 +184,26 @@ module.exports = function(app, passport, acl) {
     // =====================================
 
     app.post("/api/add_restaurant", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
-        var newRestaurant = new Restaurant(req.body);
-        newRestaurant.save(function(err) {
-            if(err) {
-                res.status(400).json(err.errors);
+        // check if restaurant already exists
+        Restaurant.find({name: req.body.name}, function(err, docs) {
+            if(!err && docs.length == 0) {
+                var newRestaurant = new Restaurant(req.body);
+                newRestaurant.save(function(err) {
+                    if(err) {
+                        res.status(400).json(err.errors);
+                    }
+                    else {
+                        res.send({created: newRestaurant});
+                    }
+                });
+            }
+            else if(!err && docs.length != 0) {
+                res.json({exists: docs});
             }
             else {
-                res.send(200);
+                res.send(500);
             }
-        })
-    });
-
-    app.post("/api/add_item", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
-        var newItem = new Item(req.body);
-        newItem.save(function(err) {
-            if(err) {
-                res.status(400).json(err.errors);
-            }
-            else {
-                res.send(200);
-            }
-        })
-    });
-
-    app.get("/api/item_schema", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
-        res.json(Item.schema);
+        });
     });
 
     app.get("/api/restaurant_schema", [authenticated, acl.middleware(2, get_user_id)], function(req, res) {
@@ -219,10 +213,6 @@ module.exports = function(app, passport, acl) {
     // =====================================
     // ADMIN UI ROUTES =====================
     // =====================================
-
-    app.get("/add-item", [authenticated, acl.middleware(1, get_user_id)], function(req, res) {
-        res.sendfile("./public/views/index.html");
-    });
 
     app.get("/add-restaurant", [authenticated, acl.middleware(1, get_user_id)], function(req, res) {
         res.sendfile("./public/views/index.html");
@@ -247,64 +237,119 @@ module.exports = function(app, passport, acl) {
     // get results of restaurant search
     app.post("/api/results", function(req, res) {
         // validate that only 5 restaurants are searched for
-        if(req.body.restaurants.length > 5) {
-            res.status(403).send("Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first");
+        if(req.body.restaurants.length > 2) {
+            res.status(403).send("Sorry, you may only search for 2 restaurants at a time, try removing a restaurant first");
             return;
         }
 
-        var results = [];
-        var restaurantsFinished = 0;
+        var results = {};
+        var totalRestaurants = req.body.restaurants.length;
+        var totalItems = {};
+        var limitsReached = false;
+        var restaurantsDone = 0;
 
         var cal_max = req.body.calories == null ? Number.MAX_SAFE_INTEGER : req.body.calories;
         var pro_max = req.body.protein == null ? Number.MAX_SAFE_INTEGER : req.body.protein;
         var fat_max = req.body.fat == null ? Number.MAX_SAFE_INTEGER : req.body.fat;
         var carb_max = req.body.carbs == null ? Number.MAX_SAFE_INTEGER : req.body.carbs;
 
-        for(i = 0; i < req.body.restaurants.length; i++) {
-            findItems(req.body.restaurants[i]);
-        }
-
-        function findItems(rest) {
-            Item.
-              find({restaurant: rest._id}).
-              where("calories").lte(cal_max).
-              where("protein").lte(pro_max).
-              where("fat").lte(fat_max).
-              where("carbs").lte(carb_max).
-              populate("restaurant").
-              exec(callback);
-
-            function callback(err, docs) {
-                if(!err) {
-                    console.log(docs);
-                    results = results.concat(docs);
-                    restaurantsFinished++;
-                    // if this is the last search
-                    if(restaurantsFinished == req.body.restaurants.length) {
-                        res.json(results);
+        for(i = 0; i < totalRestaurants; i++) {
+            // API call to get brand_id
+            request.post(
+                'https://api.nutritionix.com/v1_1/search',
+                { json:
+                    {
+                        "appId": app.locals.NUTRITIONIX_APP_ID,
+                        "appKey": app.locals.NUTRITIONIX_APP_KEY,
+                        "offset": 0,
+                        "limit": 1,
+                        "fields":["brand_id"],
+                        "filters": {
+                            "item_type": 1
+                        },
+                        "queries": {
+                            "brand_name": req.body.restaurants[i].name
+                        }
+                    }
+                },
+                function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        findItems(body.hits[0].fields.brand_id, 0);
+                    }
+                    else {
+                        res.status(500).json(response.body);
+                        limitsReached = true;
                     }
                 }
-                else {
-                    res.json({"error": "Error searching"});
-                }
-            }
+            );
         }
-    });
 
-    // get all items
-    app.get("/api/items", function(req, res) {
-        Item.find({}, function(err, docs) {
-            if(!err) {
-                res.json(docs);
-            }
-            else {
-                res.json({});
-            }
-        });
+        function findItems(brandId, offset) {
+            request.post(
+                'https://api.nutritionix.com/v1_1/search',
+                { json:
+                    {
+                        "appId": app.locals.NUTRITIONIX_APP_ID,
+                        "appKey": app.locals.NUTRITIONIX_APP_KEY,
+                        "offset": offset,
+                        "limit": 50,
+                        "fields":["item_name", "brand_name","nf_calories", "nf_total_carbohydrate",
+                        "nf_total_fat", "nf_protein"],
+                        "filters": {
+                            "brand_id": brandId
+                        }
+                    }
+                },
+                function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+
+                        // kick off all subsequent calls now that we have total hits
+                        if(offset == 0) {
+                            for(h = 50; h < body.total; h+=50) {
+                                totalItems[brandId] = body.total;
+                                results[brandId] = [];
+                                findItems(brandId, h);
+                            }
+                        }
+
+                        for(i = 0; i < body.hits.length; i++) {
+                            var item = {
+                                restaurant: body.hits[i].fields.brand_name,
+                                name : body.hits[i].fields.item_name,
+                                calories: body.hits[i].fields.nf_calories,
+                                protein: body.hits[i].fields.nf_protein,
+                                fat: body.hits[i].fields.nf_total_fat,
+                                carbs: body.hits[i].fields.nf_total_carbohydrate
+                            }
+                            results[brandId].push(item);
+                        }
+
+                        if(results[brandId].length == totalItems[brandId]) {
+                            restaurantsDone++;
+
+                            // done
+                            if(restaurantsDone == totalRestaurants && !limitsReached) {
+                                var toReturn = [];
+                                Object.keys(results).forEach(function(key) {
+                                    toReturn = toReturn.concat(results[key]);
+                                });
+                                res.json(toReturn);
+                            }
+                        }
+                    }
+                    else {
+                        limitsReached = true;
+                        res.status(500).json(response.body);
+                    }
+                }
+            );
+        }
     });
 
     // get all restaurants
     app.get("/api/restaurants", function(req, res) {
+        var restaurants = [];
+        var restaurantsEvaluated = 0;
         Restaurant.find({}, function(err, docs) {
             if(!err) {
                 res.json(docs);

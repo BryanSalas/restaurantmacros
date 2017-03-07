@@ -61,12 +61,6 @@ define(['angularAMD',
            resolve: { loggedin: checkLoggedin }
         }))
 
-        .when("/add-item", angularAMD.route({
-           templateUrl: 'views/addItem.html',
-           controller: 'rmAddItem',
-           controllerUrl: 'controllers/addItem'
-        }))
-
         .when("/add-restaurant", angularAMD.route({
            templateUrl: 'views/addRestaurant.html',
            controller: 'rmAddRestaurant',
@@ -160,10 +154,10 @@ define(['angularAMD',
         $scope.hide_alert = true;
 	    $scope.nav_tabs = [
 	        {label: "Home", route: "/"},
-	        {label: "Search", route: "/search"},
-	        {label: "Restaurants", route: "/restaurants"},
+	        {label: "Search", route: "/search"}
+	        /*{label: "Restaurants", route: "/restaurants"},
 	        {label: "Menu Items", route: "/items"},
-	        {label: "About", route: "/about"}
+	        {label: "About", route: "/about"}*/
 	    ];
 
 	    $scope.nav_tabs_right_no_auth = [
