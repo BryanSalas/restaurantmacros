@@ -1,12 +1,28 @@
 <div class="rm-results">
-    <table class="table table-sm table-inverse">
-        <thead>
+    <table class="table table-sm table-inverse table-fixed">
+
+        <!-- fixed header-->
+        <thead ng-style="fixedWidth" style="position: fixed; background: white; top: 0px;" ng-if="fixedHeader">
             <tr>
-                <th ng-repeat="header in food_headers" ng-click="sortBy(header.key, true)">{{header.name}}</th>
+                <th ng-style="widths[header.key]" ng-repeat="header in foodHeaders" ng-click="sortBy(header.key);">
+                    {{header.name}}<span style="margin-left: 5px;"
+                                         ng-class="{'glyphicon glyphicon-chevron-up': order == header.key,
+                                         'glyphicon glyphicon-chevron-down': order == '-' + header.key}"></span>
+                </th>
+            </tr>
+        </thead>
+
+        <thead class="food-header">
+            <tr>
+                <th class="{{header.key}}-header" ng-repeat="header in foodHeaders" ng-click="sortBy(header.key);">
+                    {{header.name}}<span style="margin-left: 5px;"
+                                         ng-class="{'glyphicon glyphicon-chevron-up': order == header.key,
+                                         'glyphicon glyphicon-chevron-down': order == '-' + header.key}"></span>
+                </th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="result in results">
+            <tr ng-repeat="result in results | orderBy: order">
                 <td>{{result.restaurant}}</td>
                 <td>{{result.name}}</td>
                 <td>{{result.calories}}</td>

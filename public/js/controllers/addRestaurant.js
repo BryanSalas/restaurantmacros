@@ -11,9 +11,9 @@ define(['app'],
 
         $scope.addRestaurant = function() {
             $http.post("api/add_restaurant", $scope.newRestaurant).then(function(result) {
+                $scope.newRestaurant = {};
             }, function(result) {
                 $scope.serverErrors = result.data;
-                $scope.newRestaurant = {};
             });
         }
     }

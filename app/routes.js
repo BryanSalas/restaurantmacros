@@ -296,7 +296,19 @@ module.exports = function(app, passport, acl) {
                         "fields":["item_name", "brand_name","nf_calories", "nf_total_carbohydrate",
                         "nf_total_fat", "nf_protein"],
                         "filters": {
-                            "brand_id": brandId
+                            "brand_id": brandId,
+                            "nf_calories":{
+                                "lte": cal_max
+                            },
+                            "nf_total_carbohydrate": {
+                                "lte": carb_max
+                            },
+                            "nf_total_fat": {
+                                "lte": fat_max
+                            },
+                            "nf_protein": {
+                                "lte": pro_max
+                            }
                         }
                     }
                 },
@@ -305,9 +317,9 @@ module.exports = function(app, passport, acl) {
 
                         // kick off all subsequent calls now that we have total hits
                         if(offset == 0) {
+                            results[brandId] = [];
+                            totalItems[brandId] = body.total;
                             for(h = 50; h < body.total; h+=50) {
-                                totalItems[brandId] = body.total;
-                                results[brandId] = [];
                                 findItems(brandId, h);
                             }
                         }
