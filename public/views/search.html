@@ -22,12 +22,12 @@
             </div>
 
             <button style="width: 100%; margin-top: 15px;" class="btn btn-lg btn-success" ng-click="doSearch();">
-                <span ng-if="!showLoading"><span class="glyphicon glyphicon-search"/> Search</span>
+                <span ng-if="!showLoading"><span class="glyphicon glyphicon-search"></span> Search</span>
             </button>
         </div>
     </div>
 
-    <div ng-if="showLoading">
+    <div style="text-align: center;" ng-if="showLoading">
         Searching... <i class="fa fa-circle-o-notch fa-spin fa-fw"></i>
     </div>
 </div>
