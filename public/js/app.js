@@ -200,6 +200,10 @@ define(['angularAMD',
             $scope.hideAlert();
         });
 
+        $scope.scrollTop = function() {
+            window.scrollTo(0, 0);
+        }
+
 	});
 
     return angularAMD.bootstrap(app);

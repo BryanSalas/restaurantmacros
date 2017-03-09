@@ -314,29 +314,12 @@ module.exports = function(app, passport, acl) {
                 },
                 function (error, response, body) {
                     if (!error && response.statusCode == 200) {
-
-                        // kick off all subsequent calls now that we have total hits
                         if(offset == 0) {
                             results[brandId] = [];
-                            totalItems[brandId] = body.total;
-                            for(h = 50; h < body.total; h+=50) {
-                                findItems(brandId, h);
-                            }
                         }
 
-                        for(i = 0; i < body.hits.length; i++) {
-                            var item = {
-                                restaurant: body.hits[i].fields.brand_name,
-                                name : body.hits[i].fields.item_name,
-                                calories: body.hits[i].fields.nf_calories,
-                                protein: body.hits[i].fields.nf_protein,
-                                fat: body.hits[i].fields.nf_total_fat,
-                                carbs: body.hits[i].fields.nf_total_carbohydrate
-                            }
-                            results[brandId].push(item);
-                        }
-
-                        if(results[brandId].length == totalItems[brandId]) {
+                        // restaurant done
+                        if(body.hits.length == 0) {
                             restaurantsDone++;
 
                             // done
@@ -347,6 +330,22 @@ module.exports = function(app, passport, acl) {
                                 });
                                 res.json(toReturn);
                             }
+                        }
+
+                        else {
+                            for(i = 0; i < body.hits.length; i++) {
+                                var item = {
+                                    restaurant: body.hits[i].fields.brand_name,
+                                    name : body.hits[i].fields.item_name,
+                                    calories: body.hits[i].fields.nf_calories,
+                                    protein: body.hits[i].fields.nf_protein,
+                                    fat: body.hits[i].fields.nf_total_fat,
+                                    carbs: body.hits[i].fields.nf_total_carbohydrate
+                                }
+                                results[brandId].push(item);
+                            }
+
+                            findItems(brandId, offset + 50);
                         }
                     }
                     else {
