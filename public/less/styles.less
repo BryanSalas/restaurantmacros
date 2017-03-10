@@ -165,6 +165,26 @@ footer {
   }
 }
 
+.alert {
+    margin-bottom: 5px;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    transition: top .3s ease;
+
+    &.alert-hidden {
+        top: -60px;
+    }
+
+    &.alert-visible {
+        top: 0px;
+    }
+}
+
+.alert-dismissable {
+    padding-right: 0;
+}
+
 /*
 **
 ** BUTTONS
@@ -197,21 +217,6 @@ footer {
 }
 
 // custom global classes
-.alert {
-    margin-bottom: 5px;
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    transition: top .3s ease;
-
-    &.alert-hidden {
-        top: -60px;
-    }
-
-    &.alert-visible {
-        top: 0px;
-    }
-}
 
 .rm-visible {
     visibility: visible;

@@ -29,11 +29,10 @@
     <body ng-cloak ng-controller="mainCtrl">
 
     <!-- alerts -->
-    <div id="alert-box" ng-class="hide_alert ? 'alert-hidden' : 'alert-visible'" class="alert alert-dismissible rm-center-text" role="alert">
-        {{alert_text}}
-        <button type="button" ng-click="hideAlert();" class="close" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
+    <div id="alert-box" ng-class="hide_alert ? 'alert-hidden' : 'alert-visible'"
+         class="alert rm-center-text flex-row" role="alert">
+        <span class="flex-one">{{alert_text}}</span>
+        <span class="glyphicon glyphicon-remove" ng-click="hideAlert();"></span>
     </div>
 
         <div style="margin-bottom: 60px;" class="container">
