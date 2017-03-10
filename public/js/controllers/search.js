@@ -35,10 +35,9 @@ define(['app',
 
         function onError(result) {
             $scope.showLoading = false;
+            console.log(result.data.errors[0]);
             // user did something they are not allowed to do
-            if(result.status == 403) {
-                $scope.$emit('showAlert', [result.data, "danger"]);
-            }
+            $scope.$emit('showAlert', [result.data.errors[0], "danger"]);
         }
 
         function validateInput() {
@@ -117,7 +116,6 @@ define(['app',
                 $scope.$apply(function () {
                     $scope.already_selected = null;
                     $scope.selected_restaurants.push(item);
-                    $scope.$emit('showAlert', ["Successfully added " + item.name, "success"]);
                 });
                 $('.typeahead').typeahead('val','');
             }
