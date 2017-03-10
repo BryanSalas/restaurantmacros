@@ -35,7 +35,6 @@ define(['app',
 
         function onError(result) {
             $scope.showLoading = false;
-            console.log(result.data.errors[0]);
             // user did something they are not allowed to do
             $scope.$emit('showAlert', [result.data.errors[0], "danger"]);
         }
