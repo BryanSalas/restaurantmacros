@@ -193,7 +193,6 @@ define(['angularAMD',
 
         $scope.hideAlert = function() {
             $scope.hide_alert = true;
-            $('#alert-box').removeClass("alert-" + $scope.alert_type);
         }
 
         $scope.$on('hideAlert', function(event, args) {

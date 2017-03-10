@@ -238,7 +238,7 @@ module.exports = function(app, passport, acl) {
     app.post("/api/results", function(req, res) {
         // validate that only 5 restaurants are searched for
         if(req.body.restaurants.length > 2) {
-            res.status(403).send("Sorry, you may only search for 2 restaurants at a time, try removing a restaurant first");
+            res.status(403).json({errors: ["Sorry, you may only search for 2 restaurants at a time, try removing a restaurant first"]});
             return;
         }
 
@@ -247,6 +247,19 @@ module.exports = function(app, passport, acl) {
         var totalItems = {};
         var limitsReached = false;
         var restaurantsDone = 0;
+
+        var MACROS = ["calories", "protein", "fat", "carbs"];
+
+        for(var i = 0; i < MACROS.length; i++) {
+            if(!req.body.hasOwnProperty(MACROS[i])) {
+                res.status(400).json({errors: ["Please enter a valid number for " + MACROS[i]]});
+                return;
+            }
+            else if(req.body[MACROS[i]] < 0) {
+                res.status(400).json({errors: ["Please enter a valid number for " + MACROS[i]]});
+                return;
+            }
+        }
 
         var cal_max = req.body.calories == null ? Number.MAX_SAFE_INTEGER : req.body.calories;
         var pro_max = req.body.protein == null ? Number.MAX_SAFE_INTEGER : req.body.protein;
