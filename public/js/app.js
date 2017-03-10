@@ -192,6 +192,7 @@ define(['angularAMD',
         });
 
         $scope.hideAlert = function() {
+            $scope.alert_text = "";
             $scope.hide_alert = true;
         }
 
