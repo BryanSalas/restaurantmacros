@@ -120,7 +120,7 @@ define(['app',
             }
             else if($scope.selected_restaurants.length == $scope.max_restaurants) {
                 $scope.$apply(function() {
-                    $scope.$emit('showAlert', ["Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first", "danger"]);
+                    $scope.$emit('showAlert', ["Sorry, you may only search for 2 restaurants at a time", "danger"]);
                     $scope.already_selected = null;
                 });
             }

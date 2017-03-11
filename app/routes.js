@@ -295,12 +295,15 @@ module.exports = function(app, passport, acl) {
                         findItems(body.hits[0].fields.brand_id, 0);
                     }
                     else {
-                        if(response.body.error_message == "usage limits are exceeded") {
+                        if(!searchError && response.body.error_message == "usage limits are exceeded") {
                             app.locals.OUT_OF_API_CALLS = true;
                             res.status(500).json({error_message: "Sorry, Restaurant Macros is out of API calls for today."});
+                            searchError = true;
                             return;
                         }
-                        res.status(500).json(response.body);
+                        else if(!searchError) {
+                            res.status(500).json(response.body);
+                        }
                     }
                 }
             );
@@ -380,7 +383,9 @@ module.exports = function(app, passport, acl) {
                             res.status(500).json({error_message: "Sorry Restaurant Macros is out of API calls for today."});
                             return;
                         }
-                        res.status(500).json(response.body);
+                        else {
+                            res.status(500).json(response.body);
+                        }
                     }
                 }
             );
