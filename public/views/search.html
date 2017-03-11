@@ -13,8 +13,8 @@
         <div style="max-width: 500px; margin: 0 auto;">
 
 
-            <div class="row">
-                <div class="col-sm-3" ng-repeat="macro in macros" style="margin-bottom: 15px; margin-top: 15px;">
+            <div class="flex-row space-around">
+                <div ng-repeat="macro in macros" style="margin-bottom: 15px; margin-top: 15px;">
                     <div for="{{macro.name}}">{{macro.name}}</div>
                     <input min="0" ng-class="{'warning': macro.error}" type="number" ng-model="macro.value" placeholder="Any"
                                class="form-control" id="{{macro.name}}" style="width:80px; margin: auto;"/>

@@ -28,6 +28,10 @@
     </head>
     <body ng-cloak ng-controller="mainCtrl">
 
+    <div ng-if="outOfAPICalls" class="rm-warning" style="text-align: center; margin-bottom: 5px;">
+        Bummer! Restaurant Macros is out of API calls for today. Try again tomorrow! <!--Read more <a href="/about">here</a> -->
+    </div>
+
     <!-- alerts -->
     <div id="alert-box" ng-class="hide_alert ? 'alert-hidden' : 'alert-visible'"
          class="alert rm-center-text flex-row" role="alert">
@@ -187,11 +191,11 @@
             <div ng-view></div>
         </div>
 
-        <footer class="footer">
+        <footer style="font-size: 14px;" class="footer">
             <div class="container">
                 <hr class="featurette-divider">
-                <p class="pull-right"><a href="" ng-click="scrollTop()">Back to top</a></p>
-                <p>Developed by Bryan Salas &middot; Powered by <a target="_blank" href="http://www.nutritionix.com/api">Nutritionix API</a></p>
+                <p class="pull-right">Powered by <a target="_blank" href="http://www.nutritionix.com/api">Nutritionix API</a></p>
+                <p>Developed by Bryan Salas</p>
             </div>
         </footer>
 

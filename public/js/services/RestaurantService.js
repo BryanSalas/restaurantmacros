@@ -1,5 +1,7 @@
 define(['app'], function (app) {
-    app.factory('rmRestaurantService', ['$http', function($http) {
+    app.factory('rmRestaurantService', ['$http', '$q', function($http, $q) {
+
+        var restaurants = null;
 
         return {
             load : function() {
@@ -20,12 +22,20 @@ define(['app'], function (app) {
             },
 
             get : function() {
-                var req = {
-                    method: 'GET',
-                    url: '/api/restaurants'
-                }
+                if(restaurants == null) {
+                    var req = {
+                        method: 'GET',
+                        url: '/api/restaurants'
+                    }
 
-                return $http(req);
+                    return $http(req).then(function(result) {
+                        restaurants = result.data
+                        return restaurants;
+                    });
+                }
+                else {
+                    return $q.when(restaurants);
+                }
             }
         }
 

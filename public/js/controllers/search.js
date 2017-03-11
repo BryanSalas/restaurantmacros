@@ -36,7 +36,7 @@ define(['app',
         function onError(result) {
             $scope.showLoading = false;
             // user did something they are not allowed to do
-            $scope.$emit('showAlert', [result.data.errors[0], "danger"]);
+            $scope.$emit('showAlert', [result.data.error_message, "danger"]);
         }
 
         function validateInput() {
@@ -82,7 +82,7 @@ define(['app',
 
         $restaurantService.get().then(
             function(result) {
-                $scope.restaurants = result.data;
+                $scope.restaurants = result;
 
                 // constructs the suggestion engine
                 var engine = new Bloodhound({
@@ -120,7 +120,7 @@ define(['app',
             }
             else if($scope.selected_restaurants.length == $scope.max_restaurants) {
                 $scope.$apply(function() {
-                    $scope.$emit('showAlert', ["Sorry, you may only search for 5 restaurants at a time, try removing a restaurant first", "danger"]);
+                    $scope.$emit('showAlert', ["Sorry, you may only search for 2 restaurants at a time", "danger"]);
                     $scope.already_selected = null;
                 });
             }
