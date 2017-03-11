@@ -236,27 +236,32 @@ module.exports = function(app, passport, acl) {
 
     // get results of restaurant search
     app.post("/api/results", function(req, res) {
+        if(app.locals.OUT_OF_API_CALLS) {
+            res.status(500).json({error_message: "Sorry, Restaurant Macros is out of API calls for today."});
+            return;
+        }
+
         // validate that only 5 restaurants are searched for
         if(req.body.restaurants.length > 2) {
-            res.status(403).json({errors: ["Sorry, you may only search for 2 restaurants at a time, try removing a restaurant first"]});
+            res.status(403).json({error_message: "Sorry, you may only search for 2 restaurants at a time, try removing a restaurant first"});
             return;
         }
 
         var results = {};
         var totalRestaurants = req.body.restaurants.length;
         var totalItems = {};
-        var limitsReached = false;
         var restaurantsDone = 0;
+        var searchError = false;
 
         var MACROS = ["calories", "protein", "fat", "carbs"];
 
         for(var i = 0; i < MACROS.length; i++) {
             if(!req.body.hasOwnProperty(MACROS[i])) {
-                res.status(400).json({errors: ["Please enter a valid number for " + MACROS[i]]});
+                res.status(400).json({error_message: "Please enter a valid number for " + MACROS[i]});
                 return;
             }
             else if(req.body[MACROS[i]] < 0) {
-                res.status(400).json({errors: ["Please enter a valid number for " + MACROS[i]]});
+                res.status(400).json({error_message: "Please enter a valid number for " + MACROS[i]});
                 return;
             }
         }
@@ -290,8 +295,12 @@ module.exports = function(app, passport, acl) {
                         findItems(body.hits[0].fields.brand_id, 0);
                     }
                     else {
+                        if(response.body.error_message == "usage limits are exceeded") {
+                            app.locals.OUT_OF_API_CALLS = true;
+                            res.status(500).json({error_message: "Sorry, Restaurant Macros is out of API calls for today."});
+                            return;
+                        }
                         res.status(500).json(response.body);
-                        limitsReached = true;
                     }
                 }
             );
@@ -327,6 +336,9 @@ module.exports = function(app, passport, acl) {
                 },
                 function (error, response, body) {
                     if (!error && response.statusCode == 200) {
+                        if(searchError) {
+                            return;
+                        }
                         if(offset == 0) {
                             results[brandId] = [];
                         }
@@ -336,7 +348,7 @@ module.exports = function(app, passport, acl) {
                             restaurantsDone++;
 
                             // done
-                            if(restaurantsDone == totalRestaurants && !limitsReached) {
+                            if(restaurantsDone == totalRestaurants) {
                                 var toReturn = [];
                                 Object.keys(results).forEach(function(key) {
                                     toReturn = toReturn.concat(results[key]);
@@ -362,7 +374,12 @@ module.exports = function(app, passport, acl) {
                         }
                     }
                     else {
-                        limitsReached = true;
+                        searchError = true;
+                        if(response.body.error_message == "usage limits are exceeded") {
+                            app.locals.OUT_OF_API_CALLS = true;
+                            res.status(500).json({error_message: "Sorry Restaurant Macros is out of API calls for today."});
+                            return;
+                        }
                         res.status(500).json(response.body);
                     }
                 }
@@ -372,8 +389,6 @@ module.exports = function(app, passport, acl) {
 
     // get all restaurants
     app.get("/api/restaurants", function(req, res) {
-        var restaurants = [];
-        var restaurantsEvaluated = 0;
         Restaurant.find({}, function(err, docs) {
             if(!err) {
                 res.json(docs);
@@ -382,6 +397,17 @@ module.exports = function(app, passport, acl) {
                 res.json({});
             }
         });
+    });
+
+    // check API calls
+    app.get("/api/check_api_calls", function(req, res) {
+        if(app.locals.OUT_OF_API_CALLS) {
+            res.json({outOfAPICalls: true});
+        }
+        else {
+            res.json({outOfAPICalls: false});
+        }
+
     });
 
     app.use(acl.middleware.errorHandler("json"));

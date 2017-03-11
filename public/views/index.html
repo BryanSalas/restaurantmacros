@@ -28,6 +28,10 @@
     </head>
     <body ng-cloak ng-controller="mainCtrl">
 
+    <div ng-if="outOfAPICalls" class="rm-warning" style="text-align: center; margin-bottom: 5px;">
+        Bummer! Restaurant Macros is out of API calls for today. Try again tomorrow! <!--Read more <a href="/about">here</a> -->
+    </div>
+
     <!-- alerts -->
     <div id="alert-box" ng-class="hide_alert ? 'alert-hidden' : 'alert-visible'"
          class="alert rm-center-text flex-row" role="alert">

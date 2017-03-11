@@ -36,7 +36,7 @@ define(['app',
         function onError(result) {
             $scope.showLoading = false;
             // user did something they are not allowed to do
-            $scope.$emit('showAlert', [result.data.errors[0], "danger"]);
+            $scope.$emit('showAlert', [result.data.error_message, "danger"]);
         }
 
         function validateInput() {
@@ -82,7 +82,7 @@ define(['app',
 
         $restaurantService.get().then(
             function(result) {
-                $scope.restaurants = result.data;
+                $scope.restaurants = result;
 
                 // constructs the suggestion engine
                 var engine = new Bloodhound({
