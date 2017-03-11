@@ -2,8 +2,9 @@ define(['app',
         'services/resultsService',
         'services/RestaurantService'],
         function (app) {
-    app.controller('rmSearch', ['$scope', 'rmResultsService', 'rmRestaurantService', '$location', "$anchorScroll", "$window",
-    function($scope, $service, $restaurantService, $location, $anchorScroll, $window) {
+    app.controller('rmSearch', ['$scope', 'rmResultsService', 'rmRestaurantService', '$location', "$anchorScroll",
+    "$window", "$timeout",
+    function($scope, $service, $restaurantService, $location, $anchorScroll, $window, $timeout) {
 
         $scope.selected_restaurants = [];
 
@@ -133,7 +134,9 @@ define(['app',
         });
 
         $scope.gotoAnchor = function() {
-            $anchorScroll("restaurant");
+            $timeout(function() {
+                $anchorScroll("restaurant");
+            });
         };
 
     }]);
