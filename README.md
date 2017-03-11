@@ -4,6 +4,8 @@ https://www.restaurantmacros.com
 
 Easily count macros while dining out.
 
-Technologies used:
+Built using:
 - MEAN stack
 - Twitter Bootstrap
+- Nutritionix API (https://www.nutritionix.com/business/api)
+- LESS
