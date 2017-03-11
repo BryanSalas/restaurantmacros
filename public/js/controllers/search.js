@@ -3,8 +3,8 @@ define(['app',
         'services/RestaurantService'],
         function (app) {
     app.controller('rmSearch', ['$scope', 'rmResultsService', 'rmRestaurantService', '$location', "$anchorScroll",
-    "$window", "$timeout",
-    function($scope, $service, $restaurantService, $location, $anchorScroll, $window, $timeout) {
+    "$window",
+    function($scope, $service, $restaurantService, $location, $anchorScroll, $window) {
 
         $scope.selected_restaurants = [];
 
@@ -79,6 +79,7 @@ define(['app',
         $scope.selectedRestChanged = function() {
             $scope.already_selected = null;
             $scope.no_rest_selected = false;
+            $anchorScroll("restaurant");
         }
 
         $restaurantService.get().then(
@@ -132,12 +133,6 @@ define(['app',
                 });
             }
         });
-
-        $scope.gotoAnchor = function() {
-            $timeout(function() {
-                $anchorScroll("restaurant");
-            });
-        };
 
     }]);
 });
