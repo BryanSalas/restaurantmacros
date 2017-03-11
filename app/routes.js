@@ -237,13 +237,13 @@ module.exports = function(app, passport, acl) {
     // get results of restaurant search
     app.post("/api/results", function(req, res) {
         if(app.locals.OUT_OF_API_CALLS) {
-            res.status(500).json({error_message: "Sorry, Restaurant Macros is out of API calls for today."});
+            res.status(500).json({error_message: "No API calls left, try again tomorrow."});
             return;
         }
 
         // validate that only 5 restaurants are searched for
         if(req.body.restaurants.length > 2) {
-            res.status(403).json({error_message: "Sorry, you may only search for 2 restaurants at a time, try removing a restaurant first"});
+            res.status(403).json({error_message: "Cannot search more than 2 restaurantst"});
             return;
         }
 
@@ -297,7 +297,7 @@ module.exports = function(app, passport, acl) {
                     else {
                         if(!searchError && response.body.error_message == "usage limits are exceeded") {
                             app.locals.OUT_OF_API_CALLS = true;
-                            res.status(500).json({error_message: "Sorry, Restaurant Macros is out of API calls for today."});
+                            res.status(500).json({error_message: "No API calls left, try again tomorrow."});
                             searchError = true;
                             return;
                         }
