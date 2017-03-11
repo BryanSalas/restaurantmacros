@@ -204,12 +204,6 @@ define(['angularAMD',
             window.scrollTo(0, 0);
         }
 
-        if($scope.outOfAPICalls == null) {
-            $http.get('/api/check_api_calls').success(function(result){
-                $scope.outOfAPICalls = result.outOfAPICalls;
-            });
-        }
-
 	});
 
     return angularAMD.bootstrap(app);
